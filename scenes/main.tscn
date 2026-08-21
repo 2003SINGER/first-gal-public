@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://clcpjcllqcgog"]
+
+[ext_resource type="Script" uid="uid://856x6h7iw7yc" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://cedfmj2wmq662" path="res://scripts/scene_controller.gd" id="2_sc"]
+[ext_resource type="Script" uid="uid://83xpnm44s55q" path="res://scripts/narrative_bridge.gd" id="3_nb"]
+[ext_resource type="Script" uid="uid://c3j6bi6hvla5c" path="res://scripts/presentation/photo_viewer.gd" id="4_pv"]
+[ext_resource type="Script" path="res://scripts/interaction/interaction_controller.gd" id="5_ic"]
+
+[node name="FirstGal" type="Node" unique_id=439158931]
+script = ExtResource("1_main")
+
+[node name="SceneHost" type="Control" parent="." unique_id=1324421590]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PresentationRoot" type="Control" parent="." unique_id=1015481957]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PhotoViewer" type="Control" parent="PresentationRoot" unique_id=757511552]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_pv")
+
+[node name="Overlay" type="Control" parent="PresentationRoot/PhotoViewer" unique_id=1789669492]
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Dim" type="ColorRect" parent="PresentationRoot/PhotoViewer/Overlay" unique_id=1914880841]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.49803922)
+
+[node name="Photo" type="TextureRect" parent="PresentationRoot/PhotoViewer/Overlay" unique_id=302393306]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SceneController" type="Node" parent="." unique_id=1722051607]
+script = ExtResource("2_sc")
+
+[node name="NarrativeBridge" type="Node" parent="." unique_id=86175372]
+script = ExtResource("3_nb")
+
+[node name="InteractionController" type="Node" parent="."]
+script = ExtResource("5_ic")

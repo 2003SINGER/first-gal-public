@@ -1,0 +1,122 @@
+# =============================================================================
+# 04 Memory and Ending
+# Continuous story unit: S13 空教室 / 回忆入口 → S14 回忆蒙太奇
+# → S15 最后一张教室照片 → S16 叶晓听见 → S17 自拍 / Demo End
+#
+# S14 deliberately uses only the existing semantic PhotoViewer commands. It is
+# a quick set of fragments, not a MemoryManager or a complete backstory.
+# =============================================================================
+
+# =============================================================================
+# S13｜空教室 / 回忆入口
+# =============================================================================
+[signal arg="scene:classroom_late_afternoon"]
+
+桌椅还停在原来的位置，黑板也没擦得多干净。
+
+只是刚才还散在教室里的那些人，现在已经走得差不多了。
+
+海象看了一眼自己的位置，又看向朋友的位置，最后看向叶晓的位置。
+
+hai_xiang: 原来空教室看起来都差不多。
+
+停了一会儿。
+
+hai_xiang: 明明一点也不一样。
+
+# =============================================================================
+# S14｜Demo 回忆蒙太奇
+# =============================================================================
+
+# 海象一晃神，很多东西飞快掠过去，然后回来。
+# 这些碎片不写成对白显示出来，只用照片和快门声表达。
+
+[signal arg="photo:memory_school_start"]
+# 开学片段
+[wait time=0.9]
+[signal arg="photo:hide"]
+[wait time=0.25]
+
+[signal arg="photo:memory_rain"]
+# 雨
+[wait time=0.9]
+[signal arg="photo:hide"]
+[wait time=0.25]
+
+[signal arg="photo:memory_classroom"]
+# 课堂
+[wait time=0.9]
+[signal arg="photo:hide"]
+[wait time=0.25]
+
+[signal arg="photo:memory_friends"]
+# 朋友
+[wait time=0.9]
+[signal arg="photo:hide"]
+[wait time=0.25]
+
+[signal arg="photo:memory_ye_xiao"]
+# 叶晓
+[wait time=0.9]
+[signal arg="photo:hide"]
+[wait time=0.25]
+
+[signal arg="photo:memory_exam"]
+# 考试。快门。夕阳。
+[wait time=0.9]
+[signal arg="photo:hide"]
+[wait time=0.25]
+
+# 这里缺失的是完整的高中主线，不在 Demo 内展开。
+
+# =============================================================================
+# S15｜回到现在 / 最后一张教室照片
+# =============================================================================
+[signal arg="scene:classroom_late_afternoon"]
+
+海象走到接近第一次拍教室照片的位置。
+
+海象举起相机。
+
+[signal arg="photo:final_classroom_photo"]
+
+hai_xiang: 这样就算收完了。
+
+# =============================================================================
+# S16｜叶晓听见
+# =============================================================================
+
+ye_xiao: 什么收完了？
+
+hai_xiang: 没什么。
+ye_xiao: 我听见了。
+hai_xiang: 听见了还问。
+
+叶晓看了一眼照片。
+
+ye_xiao: 你最后还是拍这个。
+hai_xiang: 不然拍什么？
+ye_xiao: 你啊。
+
+# =============================================================================
+# S17｜自拍 / Demo End
+# =============================================================================
+
+ye_xiao: 你拍了这么多，怎么还是没几张自己的。
+hai_xiang: 我拍照的人，哪来那么多自己。
+ye_xiao: 手机有前置摄像头。
+hai_xiang: 我知道。
+ye_xiao: 那你装什么专业摄影师。
+
+ye_xiao: 过来。
+hai_xiang: 干嘛。
+ye_xiao: 拍一张。
+
+hai_xiang: 你往那边一点。
+ye_xiao: 我已经很边上了。
+hai_xiang: 你头挡住后面了。
+ye_xiao: 自拍你还管后面？
+
+[signal arg="photo:graduation_selfie"]
+
+Demo End

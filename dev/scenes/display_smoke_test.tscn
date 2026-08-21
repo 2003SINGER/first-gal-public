@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://j3hiqlgpc3pu"]
+
+[ext_resource type="Script" uid="uid://o7v207iaq3wm" path="res://dev/scripts/smoke_runner.gd" id="1_run"]
+[ext_resource type="PackedScene" uid="uid://clcpjcllqcgog" path="res://scenes/main.tscn" id="2_main"]
+
+[node name="DisplaySmokeTest" type="Node" unique_id=1746140403]
+script = ExtResource("1_run")
+
+[node name="FirstGal" parent="." unique_id=1088503367 instance=ExtResource("2_main")]

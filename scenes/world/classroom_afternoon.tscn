@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[node name="WorldClassroomAfternoon" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Bg" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.30, 0.27, 0.24, 1)
+
+[node name="SceneName" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -52.0
+offset_right = 360.0
+offset_bottom = -4.0
+mouse_filter = 2
+text = "classroom_afternoon"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.96, 0.89, 0.76, 1)
+theme_override_font_sizes/font_size = 48
+
+[node name="StateLabel" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -440.0
+offset_top = 10.0
+offset_right = 440.0
+offset_bottom = 54.0
+mouse_filter = 2
+text = "临时灰盒：下午回到教室，位置和声音都少了"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.82, 0.75, 0.62, 1)
+theme_override_font_sizes/font_size = 24

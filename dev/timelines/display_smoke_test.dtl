@@ -1,0 +1,9 @@
+hai_xiang: 测试开始：这是一句话。
+[signal arg="scene:school_gate"]
+hai_xiang: 已切换到 school_gate 场景。
+[signal arg="photo:first_day_classroom"]
+hai_xiang: 照片出现，Dialogic 仍可继续点击（请点击继续）。
+[signal arg="photo:hide"]
+hai_xiang: 照片已隐藏。
+[signal arg="scene:classroom"]
+hai_xiang: 已切换到 classroom 场景。测试结束。

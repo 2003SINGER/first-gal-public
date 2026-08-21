@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[node name="WorldSchoolCorridor" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Bg" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.35, 0.29, 0.22, 1)
+
+[node name="SceneName" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -52.0
+offset_right = 320.0
+offset_bottom = -4.0
+mouse_filter = 2
+text = "school_corridor"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.96, 0.91, 0.80, 1)
+theme_override_font_sizes/font_size = 48
+
+[node name="StateLabel" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = 10.0
+offset_right = 420.0
+offset_bottom = 54.0
+mouse_filter = 2
+text = "临时灰盒：打开的柜门、资料和垃圾袋散在走廊"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.86, 0.80, 0.69, 1)
+theme_override_font_sizes/font_size = 24

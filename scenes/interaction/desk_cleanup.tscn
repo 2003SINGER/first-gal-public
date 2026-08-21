@@ -1,0 +1,106 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/interaction/desk_cleanup.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/interaction/item_inspect_panel.gd" id="2_inspect"]
+
+[node name="DeskCleanup" type="CanvasLayer"]
+layer = 30
+script = ExtResource("1_script")
+
+[node name="Dim" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 0
+color = Color(0.04, 0.04, 0.05, 0.82)
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 260.0
+offset_top = 120.0
+offset_right = 1660.0
+offset_bottom = 960.0
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = 30.0
+offset_right = -36.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "收桌子"
+
+[node name="Status" type="Label" parent="Panel/Margin/Layout"]
+layout_mode = 2
+autowrap_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.75, 1)
+theme_override_font_sizes/font_size = 22
+text = "逐件查看，处理完一个再看下一个。"
+
+[node name="Body" type="HBoxContainer" parent="Panel/Margin/Layout"]
+custom_minimum_size = Vector2(0, 510)
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="ItemList" type="VBoxContainer" parent="Panel/Margin/Layout/Body"]
+custom_minimum_size = Vector2(410, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="InspectPanel" type="VBoxContainer" parent="Panel/Margin/Layout/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
+script = ExtResource("2_inspect")
+
+[node name="ItemName" type="Label" parent="Panel/Margin/Layout/Body/InspectPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "物品"
+
+[node name="PlaceholderImage" type="ColorRect" parent="Panel/Margin/Layout/Body/InspectPanel"]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+color = Color(0.28, 0.32, 0.41, 1)
+
+[node name="PlaceholderText" type="Label" parent="Panel/Margin/Layout/Body/InspectPanel/PlaceholderImage"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "桌面占位"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_colors/font_color = Color(0.78, 0.82, 0.9, 1)
+theme_override_font_sizes/font_size = 24
+
+[node name="Description" type="Label" parent="Panel/Margin/Layout/Body/InspectPanel"]
+custom_minimum_size = Vector2(0, 105)
+layout_mode = 2
+autowrap_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "说明"
+
+[node name="ProcessButton" type="Button" parent="Panel/Margin/Layout/Body/InspectPanel"]
+custom_minimum_size = Vector2(280, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "标记处理完成"
+
+[node name="FinishButton" type="Button" parent="Panel/Margin/Layout"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "收拾好了"

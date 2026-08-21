@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://dev/scripts/demo_current_runner.gd" id="1_runner"]
+[ext_resource type="PackedScene" path="res://scenes/main.tscn" id="2_main"]
+
+[node name="DemoCurrentRunner" type="Node"]
+script = ExtResource("1_runner")
+
+[node name="FirstGal" parent="." instance=ExtResource("2_main")]

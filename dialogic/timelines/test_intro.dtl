@@ -1,0 +1,10 @@
+hai_xiang: ......要出门了。
+join hai_xiang left
+hai_xiang: 相机，资料，手机。应该没落东西。
+leave hai_xiang
+- 再检查一下
+	hai_xiang: 相机……有。手机……有。
+- 算了，出门
+	hai_xiang: 走了。
+[background arg="res://assets/backgrounds/school/xianghai_gate_day.png" fade="0.0"]
+又是熟悉的景色......

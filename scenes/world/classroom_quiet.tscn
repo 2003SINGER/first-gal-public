@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[node name="WorldClassroomQuiet" type="Control"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Bg" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.18, 0.21, 0.25, 1)
+
+[node name="SceneName" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -52.0
+offset_right = 320.0
+offset_bottom = -4.0
+mouse_filter = 2
+text = "classroom_quiet"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.78, 0.84, 0.91, 1)
+theme_override_font_sizes/font_size = 48
+
+[node name="StateLabel" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = 10.0
+offset_right = 420.0
+offset_bottom = 54.0
+mouse_filter = 2
+text = "临时灰盒：声音逐渐少下来"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.63, 0.72, 0.82, 1)
+theme_override_font_sizes/font_size = 24
