@@ -36,6 +36,9 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_pv")
 
+[node name="SFXPlayer" type="AudioStreamPlayer" parent="PresentationRoot" unique_id=991001001]
+stream_paused = false
+
 [node name="Overlay" type="Control" parent="PresentationRoot/PhotoViewer" unique_id=1789669492]
 visible = false
 anchors_preset = 0

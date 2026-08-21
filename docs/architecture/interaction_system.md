@@ -43,6 +43,8 @@ Dialogic Alpha20 的 `handle_event()` 在暂停期间会等待 `dialogic_resumed
     "kept": PackedStringArray,
     "discarded_initially": PackedStringArray,
     "discarded_later": PackedStringArray,
+    "returned": PackedStringArray,            # e.g. ye_xiao_pen 还给叶晓
+    "overpacked_once": bool,                  # 包是否曾溢出（仅 S05 即时分支用）
 }
 ```
 
@@ -53,19 +55,20 @@ InteractionController.last_locker_result
 InteractionController.locker_items_kept
 InteractionController.locker_items_discarded_initially
 InteractionController.locker_items_discarded_later
+InteractionController.locker_items_returned
 ```
 
-这不是存档，也不是完整 GameState。
+这不是存档，也不是完整 GameState。`overpacked_once` / `locker_overpacked` 仅用于 S05 结束时的即时分支，是演出状态，不长期保存。
 
 ## 当前物品与容量规则
 
 当前 5 件灰盒物品：
 
 - `sports_day_bib`：运动会号码布
-- `old_workbook`：旧练习册
-- `ye_xiao_pen`：叶晓的笔
-- `keychain_piece`：断掉的钥匙扣
-- `used_paper`：揉皱的草稿纸
+- `old_workbook`：旧练习册（红笔“别睡了”）
+- `ye_xiao_pen`：叶晓的笔（去向可能是“还给她”，走 `returned` 而非 `discarded`）
+- `freshman_map`：入学报到折页（替换原 `keychain_piece`）
+- `broken_ruler`：断尺（替换原 `used_paper`）
 
 最终最多保留 3 件。不显示 `3/5`、重量、格子或稀有度。
 
@@ -75,7 +78,7 @@ InteractionController.locker_items_discarded_later
 ……装不下了。腾个位置。
 ```
 
-玩家只能从已保留物中重新舍弃；该物品记录为 `discarded_later`。第一次直接舍弃的物品记录为 `discarded_initially`。
+玩家只能从已保留物中重新舍弃；该物品记录为 `discarded_later`。第一次直接舍弃的物品记录为 `discarded_initially`。`ye_xiao_pen` 无论初次还是二次，只要选“还给她”都记录为 `returned` / `returned_late`，绝不混入 `discarded_initially`。
 
 ## 当前 Timeline 组织
 
@@ -90,10 +93,21 @@ S13–S17 不增加交互系统，直接使用世界场景、Dialogic 和现有 
 ## S11 DeskCleanup
 
 `res://scenes/interaction/desk_cleanup.tscn` +
-`res://scripts/interaction/desk_cleanup.gd` 只处理 4 个桌面/桌洞物品：点击查看、标记处理完成、物品完成后结束。
+`res://scripts/interaction/desk_cleanup.gd` 只处理 2 个桌面/桌洞物品：点击查看即算“已看”，没有“标记处理完成”按钮，也没有 `[已处理]` 标签。全部看过后“收拾好了”才可点。
 
 它复用了 `res://scripts/interaction/item_inspect_panel.gd` 这个小组件；LockerCleanup 的 InspectPanel 也使用同一个组件来展示名称和短描述。
-DeskCleanup 没有 keep/discard、容量或二次舍弃规则。
+DeskCleanup 没有 keep/discard、容量或二次舍弃规则；真正清空桌洞的演出留在该段 Timeline 里。
+
+## 跨 Timeline 客观状态（延迟实现）
+
+当前 `Dialogic.VAR.var_storage` 直接承载 `locker_overpacked` 等未注册 key（灰盒阶段可行）。
+正式解法 `scripts/state/demo_state.gd` 本轮**不实现**，触发条件已定死：
+
+> 当出现第 2 个需要跨 Timeline 读取的 gameplay result 时，再建 `demo_state.gd`，
+> 把跨 Timeline 使用的客观状态统一注册或包一层状态接口，
+> 避免直接读写 `var_storage` 在存档 / 变量编辑器 / 插件升级时出问题。
+
+在此之前，仅 `locker_overpacked` 一个跨 Timeline 信号，继续走 `var_storage` 即可。
 
 ## 运行方式
 

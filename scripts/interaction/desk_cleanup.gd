@@ -1,8 +1,12 @@
 extends CanvasLayer
 
 ## DeskCleanup
-## Small, one-shot inspection interaction for S11. It reuses ItemInspectPanel
-## for item name/description display, but has no keep/discard or capacity rules.
+## Small, one-shot inspection interaction for S11. It reuses the shared item
+## inspection display, but has no keep/discard or capacity rules.
+##
+## Inspecting an item marks it seen (no "process" button, no [已处理] tag).
+## Once everything has been looked at, the "收拾好了" button becomes clickable
+## and the Timeline performs the actual desk-clearing as a staged beat.
 
 signal finished(result: Dictionary)
 
@@ -10,41 +14,29 @@ const ITEMS := [
 	{
 		"id": "last_book",
 		"display_name": "最后一本书",
-		"description": "已经翻到最后几页。今天之后，应该不会再放回这张桌子。",
+		"inspect_text": "已经翻到最后几页。\n\n海象下意识想把它放回桌洞。\n\n手伸到一半，又停住了。",
 	},
 	{
 		"id": "crumpled_note",
-		"display_name": "桌洞里的皱纸",
-		"description": "上面写着：下课小卖部？只是某一天留下的一句话。",
-	},
-	{
-		"id": "ordinary_small_item",
-		"display_name": "普通小物件",
-		"description": "没有特别的来历，也没有非带走不可的理由。",
-	},
-	{
-		"id": "desk_trace",
-		"display_name": "桌面痕迹",
-		"description": "擦掉以后，桌面就只剩下一张普通的桌面。",
+		"display_name": "皱纸",
+		"inspect_text": "“下课小卖部？”\n\n海象看了两秒。\n\n哪天的来着。",
 	},
 ]
 
 @onready var status_label: Label = $Panel/Margin/Layout/Status
 @onready var item_list: VBoxContainer = $Panel/Margin/Layout/Body/ItemList
-@onready var inspect_panel: ItemInspectPanel = $Panel/Margin/Layout/Body/InspectPanel
-@onready var process_button: Button = $Panel/Margin/Layout/Body/InspectPanel/ProcessButton
+@onready var item_name: Label = $Panel/Margin/Layout/Body/InspectPanel/ItemName
+@onready var description: Label = $Panel/Margin/Layout/Body/InspectPanel/Description
 @onready var finish_button: Button = $Panel/Margin/Layout/FinishButton
 
-var handled := {}
+var seen := {}
 var selected_id := ""
 
 
 func _ready() -> void:
 	for item in ITEMS:
-		handled[item.id] = false
+		seen[item.id] = false
 		_add_item_button(item)
-	process_button.pressed.connect(_handle_selected)
-	finish_button.pressed.connect(_try_finish)
 	_select_item(ITEMS[0].id)
 	_refresh()
 
@@ -61,21 +53,15 @@ func _add_item_button(item: Dictionary) -> void:
 
 func _select_item(item_id: String) -> void:
 	selected_id = item_id
-	_refresh()
-
-
-func _handle_selected() -> void:
-	if selected_id.is_empty():
-		return
-	handled[selected_id] = true
+	seen[item_id] = true   # merely opening an item counts as having looked at it
 	_refresh()
 
 
 func _try_finish() -> void:
-	if _handled_count() < ITEMS.size():
-		status_label.text = "桌上还有东西没有处理。"
+	if _seen_count() < ITEMS.size():
+		status_label.text = "桌洞里还有东西没看。"
 		return
-	var result := {"handled": _handled_ids()}
+	var result := {"seen": _seen_ids()}
 	finished.emit(result)
 
 
@@ -83,35 +69,35 @@ func _refresh() -> void:
 	var item := _item_for_id(selected_id)
 	if item.is_empty():
 		return
-	inspect_panel.present_item(item)
-	process_button.disabled = handled[selected_id]
-	process_button.text = "已处理" if handled[selected_id] else "标记处理完成"
+	item_name.text = str(item.get("display_name", "物品"))
+	description.text = str(item.get("inspect_text", ""))
 
 	for index in item_list.get_child_count():
 		var button := item_list.get_child(index) as Button
 		var button_item: Dictionary = ITEMS[index]
-		button.text = button_item.display_name + ("  [已处理]" if handled[button_item.id] else "")
+		var s: bool = seen[button_item.id]
+		button.text = button_item.display_name + ("  [看过了]" if s else "")
 
-	if _handled_count() == ITEMS.size():
-		status_label.text = "桌面和桌洞都清好了。"
+	if _seen_count() == ITEMS.size():
+		status_label.text = "差不多了。"
 		finish_button.disabled = false
 	else:
-		status_label.text = "逐件查看，处理完一个再看下一个。"
-		finish_button.disabled = false
+		status_label.text = "桌洞里还剩几样东西。"
+		finish_button.disabled = true
 
 
-func _handled_count() -> int:
+func _seen_count() -> int:
 	var count := 0
 	for item in ITEMS:
-		if handled[item.id]:
+		if seen[item.id]:
 			count += 1
 	return count
 
 
-func _handled_ids() -> PackedStringArray:
+func _seen_ids() -> PackedStringArray:
 	var result := PackedStringArray()
 	for item in ITEMS:
-		if handled[item.id]:
+		if seen[item.id]:
 			result.append(item.id)
 	return result
 

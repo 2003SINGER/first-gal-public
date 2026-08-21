@@ -17,6 +17,7 @@ var last_locker_result: Dictionary = {}
 var locker_items_kept := PackedStringArray()
 var locker_items_discarded_initially := PackedStringArray()
 var locker_items_discarded_later := PackedStringArray()
+var locker_items_returned := PackedStringArray()
 var last_desk_result: Dictionary = {}
 
 
@@ -45,6 +46,7 @@ func _on_locker_cleanup_finished(result: Dictionary) -> void:
 	locker_items_kept = result.get("kept", PackedStringArray())
 	locker_items_discarded_initially = result.get("discarded_initially", PackedStringArray())
 	locker_items_discarded_later = result.get("discarded_later", PackedStringArray())
+	locker_items_returned = result.get("returned", PackedStringArray())
 	# Write the objective outcome so S05 dialogue can branch on what the player
 	# actually did, instead of always assuming an overpacked bag.
 	Dialogic.VAR.var_storage["locker_overpacked"] = 1 if result.get("overpacked_once", false) else 0

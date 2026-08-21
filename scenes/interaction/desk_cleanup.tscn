@@ -45,7 +45,7 @@ layout_mode = 2
 autowrap_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.72, 0.75, 1)
 theme_override_font_sizes/font_size = 22
-text = "逐件查看，处理完一个再看下一个。"
+text = "桌洞里还剩几样东西。"
 
 [node name="Body" type="HBoxContainer" parent="Panel/Margin/Layout"]
 custom_minimum_size = Vector2(0, 510)
@@ -92,12 +92,6 @@ layout_mode = 2
 autowrap_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "说明"
-
-[node name="ProcessButton" type="Button" parent="Panel/Margin/Layout/Body/InspectPanel"]
-custom_minimum_size = Vector2(280, 60)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "标记处理完成"
 
 [node name="FinishButton" type="Button" parent="Panel/Margin/Layout"]
 custom_minimum_size = Vector2(0, 64)

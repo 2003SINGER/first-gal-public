@@ -131,13 +131,22 @@ Demo 在回忆入口处只用极短蒙太奇代替完整高中主线，再回到
 ### State to record
 
     locker_items_kept
-    locker_items_discarded
+    locker_items_discarded_initially
     locker_items_discarded_later
+    locker_items_returned
     optional_interactions_seen
     photos_seen
     minor_dialogue_choices
 
 不得为了 Demo 提前编码人物成熟度、关系标签或整部作品的结局状态。
+不得制作“怀旧度”“放下过去度”“叶晓好感度”等任何数值条；Demo 只记录客观事件与物品去向。
+
+### Transient presentation state（不长期保存）
+
+    locker_overpacked
+
+仅用于 S05 结束时的即时分支（包塞不下 → 触发二次取舍演出），是演出状态而非人物属性，
+不写入长期状态、不跨 Scene 保存、不进入存档。
 
 ## 8. Next authoring artifact
 

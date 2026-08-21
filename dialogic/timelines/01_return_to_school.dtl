@@ -85,6 +85,11 @@ hai_xiang: ……没了？
 旁边的同学说："不然呢？"
 hai_xiang: 我以为会更久。
 旁边的同学说："你嫌短你回去让校长再讲半小时。"
+前排已经有人背起包。
+椅子一排一排地响起来，人开始往出口挤。
+
+[wait time=0.6]
+
 hai_xiang: 原来最后一次也不会自动变慢。
 
 [signal arg="scene:school_corridor"]

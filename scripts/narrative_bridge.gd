@@ -11,6 +11,7 @@ extends Node
 ##   photo:<id>              -> show registered photo
 ##   photo:hide              -> hide photo
 ##   interaction:<id>        -> start a modal gameplay interaction
+##   audio:<sfx_id>          -> play a registered one-shot SFX (missing file -> warning)
 ##
 ## We do NOT yet build a custom Dialogic Event. The Alpha20 Signal event is used
 ## as-is; the whole command is sent as one string and split on ":" here.
@@ -18,6 +19,7 @@ extends Node
 var scene_controller: Node = null
 var photo_viewer: Control = null
 var interaction_controller: Node = null
+var sfx_player: AudioStreamPlayer = null
 
 # Semantic photo id -> texture path. Add real entries as art lands.
 # Missing files fall back to a generated placeholder so the system never crashes
@@ -34,11 +36,20 @@ const PHOTOS := {
 	"graduation_selfie": "res://assets/photos/ending/graduation_selfie.png",
 }
 
+# One-shot SFX registry. Files live under res://assets/audio/sfx/. If a file is
+# missing we only warn (same placeholder philosophy as photos) — never crash.
+const SFX := {
+	"camera_shutter": "res://assets/audio/sfx/camera_shutter.ogg",
+	"school_bell_muffled": "res://assets/audio/sfx/school_bell_muffled.ogg",
+	"rain_short": "res://assets/audio/sfx/rain_short.ogg",
+}
 
-func setup(sc: Node, pv: Control, ic: Node) -> void:
+
+func setup(sc: Node, pv: Control, ic: Node, sp: AudioStreamPlayer) -> void:
 	scene_controller = sc
 	photo_viewer = pv
 	interaction_controller = ic
+	sfx_player = sp
 	if Dialogic != null and Dialogic.has_signal("signal_event"):
 		Dialogic.signal_event.connect(_on_dialogic_signal)
 
@@ -65,6 +76,8 @@ func _on_dialogic_signal(argument: Variant) -> void:
 		"interaction":
 			if interaction_controller != null:
 				interaction_controller.start_interaction(payload)
+		"audio":
+			_play_sfx(payload)
 		_:
 			push_warning("NarrativeBridge: unknown command kind '%s'" % kind)
 
@@ -81,6 +94,22 @@ func _show_photo_by_id(photo_id: String) -> void:
 		tex = _placeholder_texture(photo_id)
 		push_warning("NarrativeBridge: photo '%s' texture missing; using placeholder." % photo_id)
 	photo_viewer.show_photo(tex)
+
+
+func _play_sfx(sfx_id: String) -> void:
+	if sfx_player == null:
+		return
+	if not SFX.has(sfx_id):
+		push_warning("NarrativeBridge: unknown sfx_id '%s'" % sfx_id)
+		return
+
+	var path: String = SFX[sfx_id]
+	if not ResourceLoader.exists(path):
+		push_warning("NarrativeBridge: missing sfx '%s' at %s" % [sfx_id, path])
+		return
+
+	sfx_player.stream = load(path)
+	sfx_player.play()
 
 
 func _placeholder_texture(_id: String) -> Texture2D:
