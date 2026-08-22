@@ -109,23 +109,49 @@ hai_xiang: 听见了还问。
 
 叶晓看了一眼照片。
 
-ye_xiao: 你最后还是拍这个。
+ye_xiao: 你最后就拍这个啊？
+
+hai_xiang: 怎么了。
+
+ye_xiao: 空教室有啥好拍的。
+
 hai_xiang: 不然拍什么？
-ye_xiao: 你啊。
+
+ye_xiao: 人啊。
+
+hai_xiang: 那你站过去。
+
+ye_xiao: 不是。
+
+hai_xiang: 你不算人？
+
+ye_xiao: 我说的是你。
+
+hai_xiang: 我？
+
+ye_xiao: 嗯。
+
+hai_xiang: 我有什么好拍的。
+
+ye_xiao: 你刚才问的。
+
+hai_xiang: 我问的是拍什么。
+
+ye_xiao: 对啊。
+
+hai_xiang: ……
+
+ye_xiao: 不过，也可以一起拍。
+
+hai_xiang: 你怎么还改答案。
+
+ye_xiao: 我愿意。
+
+叶晓拿出手机。
 
 # =============================================================================
 # S17｜自拍 / Demo End
 # =============================================================================
-
-hai_xiang: 我有什么好拍的。
-
-ye_xiao: 那我呢？
-
-hai_xiang: 你要拍就站过去。
-
-ye_xiao: 算了。
-
-叶晓拿出手机。
 
 ye_xiao: 过来。
 
@@ -140,5 +166,30 @@ ye_xiao: 自拍你还管后面？
 
 [signal arg="audio:camera_shutter"]
 [signal arg="photo:graduation_selfie"]
+
+[wait time=0.8]
+
+hai_xiang: ……算了。
+
+ye_xiao: 又怎么了？
+
+hai_xiang: 我也给自己单独拍一张。
+
+ye_xiao: 现在？
+
+hai_xiang: 嗯。
+
+ye_xiao: 这张还管背景吗？
+
+hai_xiang: 不管。
+
+[wait time=0.4]
+
+[signal arg="photo:hide"]
+[signal arg="scene:blank"]
+
+[wait time=0.5]
+
+[signal arg="audio:camera_shutter"]
 
 # Demo End
