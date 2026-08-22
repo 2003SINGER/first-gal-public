@@ -12,14 +12,14 @@ signal finished(result: Dictionary)
 
 const ITEMS := [
 	{
-		"id": "last_book",
-		"display_name": "最后一本书",
-		"inspect_text": "已经翻到最后几页。\n\n书角卷得挺厉害。\n\n我翻了一下，又合上。",
+		"id": "desk_stickers",
+		"display_name": "桌上的贴纸",
+		"inspect_text": "桌角贴着几张贴纸。\n\n有的还挺新，有的已经磨得发白了。\n\n最边上一张翘起来一点。\n\n我按了一下。\n\n松手。\n\n又翘起来了。",
 	},
 	{
-		"id": "crumpled_note",
-		"display_name": "皱纸",
-		"inspect_text": "“下课小卖部？”\n\n纸已经揉得发软。\n\n……哪天的来着。",
+		"id": "paper_scraps",
+		"display_name": "几张小纸片",
+		"inspect_text": "桌洞最里面还压着几张小纸片。\n\n有的撕得不方不正，有一张只剩半截。\n\n“下课小卖部？”\n\n另一张只写了半个公式。\n\n……哪天的来着。",
 	},
 ]
 

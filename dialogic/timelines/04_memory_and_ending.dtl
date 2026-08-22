@@ -86,11 +86,11 @@
 # =============================================================================
 [signal arg="scene:classroom_late_afternoon"]
 
-海象走到接近第一次拍教室照片的位置。
+我挪了几步。
 
-叶晓在后面拉上袋子的拉链。
+停下。
 
-海象举起相机。
+举起相机。
 
 [signal arg="audio:camera_shutter"]
 [signal arg="photo:final_classroom_photo"]
@@ -117,15 +117,21 @@ ye_xiao: 你啊。
 # S17｜自拍 / Demo End
 # =============================================================================
 
-ye_xiao: 你拍了这么多，怎么还是没几张自己的。
-hai_xiang: 我拍照的人，哪来那么多自己。
-ye_xiao: 手机有前置摄像头。
-hai_xiang: 我知道。
-ye_xiao: 那你装什么专业摄影师。
+hai_xiang: 我有什么好拍的。
+
+ye_xiao: 那我呢？
+
+hai_xiang: 你要拍就站过去。
+
+ye_xiao: 算了。
+
+叶晓拿出手机。
 
 ye_xiao: 过来。
+
 hai_xiang: 干嘛。
-ye_xiao: 拍一张。
+
+ye_xiao: 一起拍。
 
 hai_xiang: 你往那边一点。
 ye_xiao: 我已经很边上了。
@@ -135,4 +141,4 @@ ye_xiao: 自拍你还管后面？
 [signal arg="audio:camera_shutter"]
 [signal arg="photo:graduation_selfie"]
 
-Demo End
+# Demo End
