@@ -4,12 +4,23 @@ extends CanvasLayer
 ## A self-contained, one-shot cleanup interaction. It owns item presentation and
 ## decisions only: it neither knows S05 nor starts/resumes Dialogic.
 ##
+## Every item carries branch data so each state has its own text (no single
+## reused description):
+##   第一次检视文本      inspect_text
+##   初次保留文本        keep_text
+##   初次舍弃/去向文本   discard_text        ("returned" 物品走"还给她"去向)
+##   已保留后被迫重处理  late_discard_text / late_return_text
+##
+## `photo_pack` is a special item: it is NOT counted toward capacity, has no
+## keep/discard, and is auto-collected. Inspecting it shows the first-day
+## classroom photo inside this panel (S13 echoes the same photo later).
+##
 ## Result:
 ## {
 ##   "kept": PackedStringArray,
 ##   "discarded_initially": PackedStringArray,
 ##   "discarded_later": PackedStringArray,
-##   "returned": PackedStringArray,          # e.g. ye_xiao_pen given back
+##   "returned": PackedStringArray,          # e.g. ye_xiao_pen 还给叶晓
 ##   "overpacked_once": bool,                # true if the bag ever overflowed
 ## }
 
@@ -53,7 +64,7 @@ const ITEMS := [
 		"discard_label": "还给她",
 		"discard_text": "海象把笔递过去。\n叶晓接过去看了一眼。\n\n“居然还能写。”",
 		"late_discard_label": "还是还给她",
-		"late_discard_text": "海象又把笔拿了出来。\n叶晓：“怎么，想起来了？”\n海象：“腾位置。”\n叶晓：“……哦。”",
+		"late_return_text": "海象又把笔拿了出来。\n叶晓：“怎么，想起来了？”\n海象：“腾位置。”\n叶晓：“……哦。”",
 		"discard_result": "returned",
 		"late_discard_result": "returned",
 	},
@@ -83,6 +94,12 @@ const ITEMS := [
 		"discard_result": "discarded",
 		"late_discard_result": "discarded_later",
 	},
+	{
+		"id": "photo_pack",
+		"display_name": "一袋照片",
+		"is_photo_set": true,
+		"inspect_text": "一袋照片，没整理过。\n\n最上面那张是三年前刚入学时的空教室，黑板干干净净。\n下面还有值日后的教室、操场、趴在桌上睡的人、一张没对上焦的人、走廊或者夕阳。",
+	},
 ]
 
 @onready var title_label: Label = $Panel/Margin/Layout/Title
@@ -90,12 +107,13 @@ const ITEMS := [
 @onready var item_list: VBoxContainer = $Panel/Margin/Layout/Body/ItemList
 @onready var item_name: Label = $Panel/Margin/Layout/Body/InspectPanel/ItemName
 @onready var description: Label = $Panel/Margin/Layout/Body/InspectPanel/Description
+@onready var photo_display: TextureRect = $Panel/Margin/Layout/Body/InspectPanel/PhotoDisplay
 @onready var keep_button: Button = $Panel/Margin/Layout/Body/InspectPanel/Actions/KeepButton
 @onready var discard_button: Button = $Panel/Margin/Layout/Body/InspectPanel/Actions/DiscardButton
 @onready var finish_button: Button = $Panel/Margin/Layout/FinishButton
 
 # item_id -> "unresolved" | "kept" | "discarded_initially"
-#           | "discarded_later" | "returned" | "returned_late"
+#           | "discarded_later" | "returned" | "returned_late" | "collected"
 var states := {}
 var selected_id := ""
 var resolving_overflow := false
@@ -104,7 +122,7 @@ var overpacked_once := false
 
 func _ready() -> void:
 	for item in ITEMS:
-		states[item.id] = "unresolved"
+		states[item.id] = "collected" if item.get("is_photo_set", false) else "unresolved"
 		_add_item_button(item)
 	keep_button.pressed.connect(_keep_selected)
 	discard_button.pressed.connect(_discard_selected)
@@ -125,6 +143,11 @@ func _add_item_button(item: Dictionary) -> void:
 
 func _select_item(item_id: String) -> void:
 	selected_id = item_id
+	var item := _item_for_id(item_id)
+	if item.get("is_photo_set", false):
+		_show_photo_set()
+	else:
+		_hide_photo_set()
 	_refresh()
 
 
@@ -140,8 +163,8 @@ func _discard_selected() -> void:
 		return
 	var item := _item_for_id(selected_id)
 	if resolving_overflow:
-		var late_result: String = item.get("late_discard_result", "discarded_later")
-		states[selected_id] = "returned_late" if late_result == "returned" else "discarded_later"
+		var late_is_return: bool = item.get("discard_result", "discarded") == "returned"
+		states[selected_id] = "returned_late" if late_is_return else "discarded_later"
 	else:
 		var dresult: String = item.get("discard_result", "discarded")
 		states[selected_id] = "returned" if dresult == "returned" else "discarded_initially"
@@ -161,7 +184,9 @@ func _reaction_text(item: Dictionary, state: String) -> String:
 		"returned":
 			return str(item.get("discard_text", ""))
 		"returned_late":
-			return str(item.get("late_discard_text", ""))
+			return str(item.get("late_return_text", item.get("late_discard_text", "")))
+		"collected":
+			return str(item.get("inspect_text", ""))
 	return str(item.get("inspect_text", ""))
 
 
@@ -175,6 +200,7 @@ func _try_finish() -> void:
 		status_label.text = "……装不下了。腾个位置。"
 		_refresh()
 		return
+	_hide_photo_set()
 	finished.emit(_build_result())
 
 
@@ -186,6 +212,14 @@ func _refresh() -> void:
 	var selected_state: String = states[selected_id]
 	item_name.text = str(item.get("display_name", "物品"))
 	description.text = _reaction_text(item, selected_state)
+
+	if item.get("is_photo_set", false):
+		keep_button.hide()
+		discard_button.hide()
+		title_label.text = "柜子整理｜一袋照片"
+		status_label.text = "照片收着了，不用挑。"
+		finish_button.text = "整理完毕"
+		return
 
 	if resolving_overflow:
 		title_label.text = "柜子整理｜腾个位置"
@@ -205,6 +239,10 @@ func _refresh() -> void:
 	for index in item_list.get_child_count():
 		var button := item_list.get_child(index) as Button
 		var button_item: Dictionary = ITEMS[index]
+		if button_item.get("is_photo_set", false):
+			button.text = button_item.display_name + "  [已收]"
+			button.disabled = resolving_overflow
+			continue
 		var state: String = states[button_item.id]
 		var suffix := ""
 		match state:
@@ -228,6 +266,30 @@ func _refresh() -> void:
 		finish_button.text = "确认整理"
 
 
+func _show_photo_set() -> void:
+	if photo_display == null:
+		return
+	var nb := _photo_provider()
+	if nb != null and nb.has_method("get_photo_texture"):
+		photo_display.texture = nb.get_photo_texture("first_day_classroom")
+	photo_display.show()
+
+
+func _hide_photo_set() -> void:
+	if photo_display != null:
+		photo_display.hide()
+		photo_display.texture = null
+
+
+func _photo_provider() -> Node:
+	# The locker is added as a child of InteractionController, which owns the
+	# bridge to NarrativeBridge's photo registry.
+	var parent := get_parent()
+	if parent != null and parent.has_method("get_photo_texture"):
+		return parent
+	return null
+
+
 func _has_unresolved() -> bool:
 	return _unresolved_count() > 0
 
@@ -235,6 +297,8 @@ func _has_unresolved() -> bool:
 func _unresolved_count() -> int:
 	var count := 0
 	for item in ITEMS:
+		if item.get("is_photo_set", false):
+			continue
 		if states[item.id] == "unresolved":
 			count += 1
 	return count
@@ -243,6 +307,8 @@ func _unresolved_count() -> int:
 func _kept_ids() -> PackedStringArray:
 	var result := PackedStringArray()
 	for item in ITEMS:
+		if item.get("is_photo_set", false):
+			continue
 		if states[item.id] == "kept":
 			result.append(item.id)
 	return result
@@ -254,6 +320,8 @@ func _build_result() -> Dictionary:
 	var discarded_later := PackedStringArray()
 	var returned := PackedStringArray()
 	for item in ITEMS:
+		if item.get("is_photo_set", false):
+			continue
 		match states[item.id]:
 			"kept": kept.append(item.id)
 			"discarded_initially": discarded_initially.append(item.id)
@@ -273,3 +341,7 @@ func _item_for_id(item_id: String) -> Dictionary:
 		if item.id == item_id:
 			return item
 	return {}
+
+
+func _exit_tree() -> void:
+	_hide_photo_set()

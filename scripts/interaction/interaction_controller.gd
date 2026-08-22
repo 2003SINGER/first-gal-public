@@ -19,6 +19,18 @@ var locker_items_discarded_initially := PackedStringArray()
 var locker_items_discarded_later := PackedStringArray()
 var locker_items_returned := PackedStringArray()
 var last_desk_result: Dictionary = {}
+var narrative_bridge: Node = null
+
+
+func setup_bridge(nb: Node) -> void:
+	narrative_bridge = nb
+
+
+func get_photo_texture(photo_id: String) -> Texture2D:
+	if narrative_bridge != null and narrative_bridge.has_method("get_photo_texture"):
+		return narrative_bridge.get_photo_texture(photo_id)
+	push_warning("InteractionController: no narrative_bridge wired; cannot fetch photo '%s'" % photo_id)
+	return null
 
 
 func start_interaction(interaction_id: String) -> void:

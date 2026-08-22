@@ -7,7 +7,7 @@
 
 它只负责：
 
-- 展示 5 个灰盒物品并查看说明；
+- 展示 5 个普通灰盒物品与 1 个特殊“照片袋”并查看说明；
 - 对每件物品做 `keep` / `discard`；
 - 在最终保留数量超过上限时进入“腾个位置”；
 - 发出 `finished(result)`。
@@ -62,15 +62,18 @@ InteractionController.locker_items_returned
 
 ## 当前物品与容量规则
 
-当前 5 件灰盒物品：
+当前 5 件普通灰盒物品，外加 1 件特殊“照片袋”：
 
 - `sports_day_bib`：运动会号码布
 - `old_workbook`：旧练习册（红笔“别睡了”）
-- `ye_xiao_pen`：叶晓的笔（去向可能是“还给她”，走 `returned` 而非 `discarded`）
+- `ye_xiao_pen`：叶晓的笔（去向是“还给她”，走 `returned` 而非 `discarded`）
 - `freshman_map`：入学报到折页（替换原 `keychain_piece`）
 - `broken_ruler`：断尺（替换原 `used_paper`）
+- `photo_pack`：一袋照片（特殊项，`is_photo_set: true`；不计入容量、无 keep/discard、自动收好；检视时在柜子面板内显示 `first_day_classroom` 照片）
 
-最终最多保留 3 件。不显示 `3/5`、重量、格子或稀有度。
+每件物品都带完整分支文本：`inspect_text` / `keep_text` / `discard_text` / `late_discard_text`，以及 `returned` 物品的 `late_return_text`（二次取舍时读取 `late_return_text` 而非 `late_discard_text`），不做成“一处描述用到底”。
+
+最终最多保留 3 件（仅计普通物品，照片袋不占名额）。不显示 `3/5`、重量、格子或稀有度。
 
 如果全部决定后保留数超过 3：
 

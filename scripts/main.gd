@@ -13,6 +13,7 @@ func _ready() -> void:
 
 	$SceneController.setup(scene_host)
 	$NarrativeBridge.setup($SceneController, photo_viewer, $InteractionController, sfx_player)
+	$InteractionController.setup_bridge($NarrativeBridge)
 
 	# Neutral default until a Demo timeline tells us where we are.
 	$SceneController.change_scene("blank")

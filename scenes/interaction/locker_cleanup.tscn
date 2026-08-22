@@ -68,23 +68,12 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "物品"
 
-[node name="PlaceholderImage" type="ColorRect" parent="Panel/Margin/Layout/Body/InspectPanel"]
-custom_minimum_size = Vector2(0, 220)
+[node name="PhotoDisplay" type="TextureRect" parent="Panel/Margin/Layout/Body/InspectPanel"]
 layout_mode = 2
-color = Color(0.28, 0.32, 0.41, 1)
-
-[node name="PlaceholderText" type="Label" parent="Panel/Margin/Layout/Body/InspectPanel/PlaceholderImage"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "物品占位"
-horizontal_alignment = 1
-vertical_alignment = 1
-theme_override_colors/font_color = Color(0.78, 0.82, 0.9, 1)
-theme_override_font_sizes/font_size = 24
+custom_minimum_size = Vector2(0, 220)
+expand_mode = 3
+stretch_mode = 5
+visible = false
 
 [node name="Description" type="Label" parent="Panel/Margin/Layout/Body/InspectPanel"]
 custom_minimum_size = Vector2(0, 105)

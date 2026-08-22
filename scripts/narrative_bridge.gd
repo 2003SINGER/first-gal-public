@@ -96,6 +96,20 @@ func _show_photo_by_id(photo_id: String) -> void:
 	photo_viewer.show_photo(tex)
 
 
+func get_photo_texture(photo_id: String) -> Texture2D:
+	if not PHOTOS.has(photo_id):
+		push_warning("NarrativeBridge: unknown photo_id '%s'" % photo_id)
+		return _placeholder_texture(photo_id)
+	var resource_path: String = PHOTOS[photo_id]
+	var tex: Texture2D = null
+	if ResourceLoader.exists(resource_path, "Texture2D"):
+		tex = load(resource_path) as Texture2D
+	if tex == null:
+		tex = _placeholder_texture(photo_id)
+		push_warning("NarrativeBridge: photo '%s' texture missing; using placeholder." % photo_id)
+	return tex
+
+
 func _play_sfx(sfx_id: String) -> void:
 	if sfx_player == null:
 		return
