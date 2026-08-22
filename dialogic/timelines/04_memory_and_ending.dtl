@@ -186,8 +186,10 @@ hai_xiang: 不管。
 [signal arg="photo:hide"]
 [signal arg="scene:blank"]
 
-[wait time=0.5]
+[wait time=0.6]
 
 [signal arg="audio:camera_shutter"]
+
+[wait time=0.8]
 
 # Demo End
