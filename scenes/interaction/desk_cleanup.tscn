@@ -45,7 +45,7 @@ layout_mode = 2
 autowrap_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.72, 0.75, 1)
 theme_override_font_sizes/font_size = 22
-text = "桌洞里还剩几样东西。"
+text = ""
 
 [node name="Body" type="HBoxContainer" parent="Panel/Margin/Layout"]
 custom_minimum_size = Vector2(0, 510)

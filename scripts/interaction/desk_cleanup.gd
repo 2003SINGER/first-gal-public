@@ -14,12 +14,12 @@ const ITEMS := [
 	{
 		"id": "last_book",
 		"display_name": "最后一本书",
-		"inspect_text": "已经翻到最后几页。\n\n海象下意识想把它放回桌洞。\n\n手伸到一半，又停住了。",
+		"inspect_text": "已经翻到最后几页。\n\n书角卷得挺厉害。\n\n我翻了一下，又合上。",
 	},
 	{
 		"id": "crumpled_note",
 		"display_name": "皱纸",
-		"inspect_text": "“下课小卖部？”\n\n海象看了两秒。\n\n哪天的来着。",
+		"inspect_text": "“下课小卖部？”\n\n纸已经揉得发软。\n\n……哪天的来着。",
 	},
 ]
 
@@ -75,15 +75,10 @@ func _refresh() -> void:
 	for index in item_list.get_child_count():
 		var button := item_list.get_child(index) as Button
 		var button_item: Dictionary = ITEMS[index]
-		var s: bool = seen[button_item.id]
-		button.text = button_item.display_name + ("  [看过了]" if s else "")
+		button.text = button_item.display_name
 
-	if _seen_count() == ITEMS.size():
-		status_label.text = "差不多了。"
-		finish_button.disabled = false
-	else:
-		status_label.text = "桌洞里还剩几样东西。"
-		finish_button.disabled = true
+	status_label.text = ""
+	finish_button.disabled = _seen_count() != ITEMS.size()
 
 
 func _seen_count() -> int:
