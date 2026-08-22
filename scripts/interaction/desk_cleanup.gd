@@ -14,7 +14,7 @@ const ITEMS := [
 	{
 		"id": "desk_stickers",
 		"display_name": "桌上的贴纸",
-		"inspect_text": "桌角贴着几张贴纸。\n\n有的还挺新，有的已经磨得发白了。\n\n最边上一张翘起来一点。\n\n我按了一下。\n\n松手。\n\n又翘起来了。",
+		"inspect_text": "桌角贴着几张贴纸。\n\n有的还挺新，有的已经磨得发白了。\n\n最边上一张已经翘起来一点。",
 	},
 	{
 		"id": "paper_scraps",
