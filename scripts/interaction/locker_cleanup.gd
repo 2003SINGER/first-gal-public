@@ -11,9 +11,10 @@ extends CanvasLayer
 ##   初次舍弃/去向文本   discard_text        ("returned" 物品走"还给她"去向)
 ##   已保留后被迫重处理  late_discard_text / late_return_text
 ##
-## `photo_pack` is a special item: it is NOT counted toward capacity, has no
-## keep/discard, and is auto-collected. Inspecting it shows the first-day
-## classroom photo inside this panel (S13 echoes the same photo later).
+## `photo_pack` is a special item: it is NOT counted toward capacity and has no
+## keep/discard. It must be inspected once, either by the player or by the
+## finish-time fallback. Inspecting it shows the first-day classroom photo
+## inside this panel (S13 echoes the same photo later).
 ##
 ## Result:
 ## {
@@ -25,6 +26,7 @@ extends CanvasLayer
 ## }
 
 signal finished(result: Dictionary)
+signal overflow_requested(result: Dictionary)
 
 const MAX_KEPT := 3
 
@@ -98,7 +100,7 @@ const ITEMS := [
 		"id": "photo_pack",
 		"display_name": "一袋照片",
 		"is_photo_set": true,
-		"inspect_text": "柜子最里面压着一个透明照片袋。\n\n我把它抽出来。\n\n里面是以前洗出来的一叠照片。\n\n第一张是空教室。\n\n黑板还是干净的，桌子也摆得整整齐齐。\n\n照片还有一点歪。\n\n……第一天。\n\n后面快速翻过几张：操场、值日后的教室、一个趴桌上睡觉的人、一张没对上焦的人、走廊、夕阳。\n\n我把照片重新塞回袋子。",
+		"inspect_text": "柜子最里面压着一个透明照片袋。\n\n我把它抽出来。\n\n里面是以前洗出来的一叠照片。\n\n第一张是空教室。\n\n黑板还是干净的，桌子也摆得整整齐齐。\n\n照片还有一点歪。\n\n……第一天。\n\n我又往后翻了几张。\n\n最后重新塞回袋子。",
 	},
 ]
 
@@ -112,17 +114,18 @@ const ITEMS := [
 @onready var discard_button: Button = $Panel/Margin/Layout/Body/InspectPanel/Actions/DiscardButton
 @onready var finish_button: Button = $Panel/Margin/Layout/FinishButton
 
-# item_id -> "unresolved" | "kept" | "discarded_initially"
+# item_id -> "unseen" | "unresolved" | "kept" | "discarded_initially"
 #           | "discarded_later" | "returned" | "returned_late" | "collected"
 var states := {}
 var selected_id := ""
 var resolving_overflow := false
+var suspended_for_overflow := false
 var overpacked_once := false
 
 
 func _ready() -> void:
 	for item in ITEMS:
-		states[item.id] = "collected" if item.get("is_photo_set", false) else "unresolved"
+		states[item.id] = "unseen" if item.get("is_photo_set", false) else "unresolved"
 		_add_item_button(item)
 	keep_button.pressed.connect(_keep_selected)
 	discard_button.pressed.connect(_discard_selected)
@@ -146,6 +149,8 @@ func _select_item(item_id: String) -> void:
 	var item := _item_for_id(item_id)
 	if item.get("is_photo_set", false):
 		_show_photo_set()
+		if states[item_id] == "unseen":
+			states[item_id] = "collected"
 	else:
 		_hide_photo_set()
 	_refresh()
@@ -194,14 +199,39 @@ func _try_finish() -> void:
 	if _has_unresolved():
 		status_label.text = "柜子里还有东西没有决定。"
 		return
+	if not _photo_pack_seen():
+		_select_item("photo_pack")
+		status_label.text = "柜子最里面还压着一袋照片。"
+		return
 	if _kept_ids().size() > MAX_KEPT:
-		resolving_overflow = true
+		if resolving_overflow:
+			status_label.text = "……装不下了。还要腾个位置。"
+			_refresh()
+			return
 		overpacked_once = true
-		status_label.text = "……装不下了。腾个位置。"
-		_refresh()
+		suspended_for_overflow = true
+		overflow_requested.emit(_build_result())
+		hide()
 		return
 	_hide_photo_set()
 	finished.emit(_build_result())
+
+
+func resume_overflow() -> void:
+	if not suspended_for_overflow:
+		push_warning("LockerCleanup: resume_overflow() called without a suspended overflow.")
+		return
+	suspended_for_overflow = false
+	resolving_overflow = true
+	show()
+
+	if states.get(selected_id, "") != "kept":
+		var kept := _kept_ids()
+		if not kept.is_empty():
+			selected_id = kept[0]
+
+	_hide_photo_set()
+	_refresh()
 
 
 func _refresh() -> void:
@@ -240,7 +270,8 @@ func _refresh() -> void:
 		var button := item_list.get_child(index) as Button
 		var button_item: Dictionary = ITEMS[index]
 		if button_item.get("is_photo_set", false):
-			button.text = button_item.display_name + "  [已收]"
+			# The photo bag is mandatory to inspect, but not a checklist item.
+			button.text = button_item.display_name
 			button.disabled = resolving_overflow
 			continue
 		var state: String = states[button_item.id]
@@ -292,6 +323,10 @@ func _photo_provider() -> Node:
 
 func _has_unresolved() -> bool:
 	return _unresolved_count() > 0
+
+
+func _photo_pack_seen() -> bool:
+	return states.get("photo_pack", "unseen") == "collected"
 
 
 func _unresolved_count() -> int:

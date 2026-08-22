@@ -8,9 +8,10 @@
 它只负责：
 
 - 展示 5 个普通灰盒物品与 1 个特殊“照片袋”并查看说明；
-- 对每件物品做 `keep` / `discard`；
-- 在最终保留数量超过上限时进入“腾个位置”；
-- 发出 `finished(result)`。
+- 对每件普通物品做 `keep` / `discard`；
+- 在第一次保留数量超过上限时发出 `overflow_requested(result)`，暂停自身并临时隐藏；
+- 通过 `resume_overflow()` 恢复同一个实例，进入二次取舍；
+- 二次取舍完成后发出 `finished(result)`。
 
 LockerCleanup 不知道 S05，不启动 Dialogic，也不跳转下一段 Timeline。
 
@@ -20,21 +21,42 @@ LockerCleanup 不知道 S05，不启动 Dialogic，也不跳转下一段 Timelin
 
 ```text
 interaction:locker_cleanup
+interaction:locker_cleanup_resume
 ```
 
-Bridge 把它转给 `InteractionController.start_interaction("locker_cleanup")`。
-InteractionController 实例化 LockerCleanup，并设置 `Dialogic.paused = true`。
+Bridge 把它们转给 `InteractionController.start_interaction()`：
+
+- `locker_cleanup`：创建 LockerCleanup 实例，并设置 `Dialogic.paused = true`；
+- `locker_cleanup_resume`：不创建新实例，恢复仍然存活的原 LockerCleanup，并设置 `Dialogic.paused = true`。
+
+第一次 overflow 时，InteractionController 收到 `overflow_requested`，写入 transient 的 `locker_overpacked = 1`，隐藏的交互实例保持存活，并恢复 Dialogic，让 Timeline 先播放“包塞不下”的演出。
 
 ## Gameplay 如何结束
 
-LockerCleanup 发出 `finished(result)` 后，InteractionController：
+LockerCleanup 有两个阶段：
 
-1. 保存结果；
+```text
+Phase A：第一次物品去向决定。
+若 kept <= 3，直接 finished。
+若 kept > 3，发 overflow_requested，临时隐藏 UI，并恢复 Timeline。
+
+Timeline 播放“包塞不下”演出后发送：
+interaction:locker_cleanup_resume
+
+Phase B：恢复原 LockerCleanup 实例，只允许对第一次 kept 的普通物品进行二次处理。
+完成后才发 finished。
+```
+
+只有最终 `finished(result)` 后，InteractionController 才会：
+
+1. 保存最终结果到 `last_locker_result` 与四组 `locker_items_*`；
 2. 关闭并释放 LockerCleanup；
 3. 发出 `interaction_finished`；
 4. 设置 `Dialogic.paused = false`。
 
-Dialogic Alpha20 的 `handle_event()` 在暂停期间会等待 `dialogic_resumed`，所以 Signal Event 后面的对白不会在柜子界面打开时提前运行。
+中途 `overflow_requested` 只是 transient session，不当作最终状态。
+
+Dialogic Alpha20 的 `handle_event()` 在暂停期间会等待 `dialogic_resumed`，所以 Signal Event 后面的对白不会在交互界面打开时提前运行。
 
 ## result 数据结构
 
@@ -69,19 +91,22 @@ InteractionController.locker_items_returned
 - `ye_xiao_pen`：叶晓的笔（去向是“还给她”，走 `returned` 而非 `discarded`）
 - `freshman_map`：入学报到折页（替换原 `keychain_piece`）
 - `broken_ruler`：断尺（替换原 `used_paper`）
-- `photo_pack`：一袋照片（特殊项，`is_photo_set: true`；不计入容量、无 keep/discard、自动收好；检视时在柜子面板内显示 `first_day_classroom` 照片）
+- `photo_pack`：一袋照片（特殊项，`is_photo_set: true`；不计入容量、无 keep/discard，但必须至少检视一次；玩家主动点击或第一次点击“整理完毕”时自动打开，检视时在柜子面板内显示 `first_day_classroom` 照片）
 
 每件物品都带完整分支文本：`inspect_text` / `keep_text` / `discard_text` / `late_discard_text`，以及 `returned` 物品的 `late_return_text`（二次取舍时读取 `late_return_text` 而非 `late_discard_text`），不做成“一处描述用到底”。
 
 最终最多保留 3 件（仅计普通物品，照片袋不占名额）。不显示 `3/5`、重量、格子或稀有度。
 
+照片袋不占容量，也不显示“还缺一个任务”的 checklist；如果玩家一直没有主动点击，第一次点击“整理完毕”时会自动切换到 `photo_pack`，玩家看完后再次点击“整理完毕”才继续判断容量。
+
 如果全部决定后保留数超过 3：
 
 ```text
-……装不下了。腾个位置。
+Phase A：overflow_requested → 隐藏 UI → Timeline 播放“包塞不下”。
+Phase B：locker_cleanup_resume → 恢复同一实例 → 仅从已保留物中重新舍弃。
 ```
 
-玩家只能从已保留物中重新舍弃；该物品记录为 `discarded_later`。第一次直接舍弃的物品记录为 `discarded_initially`。`ye_xiao_pen` 无论初次还是二次，只要选“还给她”都记录为 `returned` / `returned_late`，绝不混入 `discarded_initially`。
+该物品记录为 `discarded_later`。第一次直接舍弃的物品记录为 `discarded_initially`。`ye_xiao_pen` 无论初次还是二次，只要选“还给她”都记录为 `returned` / `returned_late`，绝不混入 `discarded_initially`。
 
 ## 当前 Timeline 组织
 

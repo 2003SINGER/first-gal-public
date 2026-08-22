@@ -47,6 +47,8 @@ if {locker_overpacked} == 1:
 	hai_xiang: 没多少。
 	ye_xiao: 你包都变方的了。
 	hai_xiang: 别看。
+	[signal arg="interaction:locker_cleanup_resume"]
+	这次拉链合上了。
 else:
 	拉链正常合上。
 	我拍了拍包。

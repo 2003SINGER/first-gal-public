@@ -25,11 +25,7 @@ hai_xiang: ……到了再填吧。
 顺手摸了一遍东西。
 
 hai_xiang: 资料、相机、手机……
-都在。
-
-画面淡入。
-
-已经到学校了。
+hai_xiang: 都在。
 
 [signal arg="scene:school_gate"]
 

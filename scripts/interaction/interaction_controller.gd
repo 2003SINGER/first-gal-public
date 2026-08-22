@@ -34,6 +34,16 @@ func get_photo_texture(photo_id: String) -> Texture2D:
 
 
 func start_interaction(interaction_id: String) -> void:
+	if interaction_id == "locker_cleanup_resume":
+		if active_interaction != null \
+		and is_instance_valid(active_interaction) \
+		and active_interaction.has_method("resume_overflow"):
+			active_interaction.resume_overflow()
+			Dialogic.paused = true
+		else:
+			push_warning("InteractionController: no suspended locker cleanup to resume.")
+		return
+
 	if active_interaction != null and is_instance_valid(active_interaction):
 		push_warning("InteractionController: '%s' requested while another interaction is active." % interaction_id)
 		return
@@ -42,6 +52,7 @@ func start_interaction(interaction_id: String) -> void:
 		"locker_cleanup":
 			active_interaction = LOCKER_CLEANUP_SCENE.instantiate()
 			active_interaction.finished.connect(_on_locker_cleanup_finished)
+			active_interaction.overflow_requested.connect(_on_locker_overflow_requested)
 			add_child(active_interaction)
 			Dialogic.paused = true
 		"desk_cleanup":
@@ -51,6 +62,13 @@ func start_interaction(interaction_id: String) -> void:
 			Dialogic.paused = true
 		_:
 			push_warning("InteractionController: unknown interaction '%s'" % interaction_id)
+
+
+func _on_locker_overflow_requested(_partial_result: Dictionary) -> void:
+	# This is a transient presentation boundary. Keep the same LockerCleanup
+	# instance alive while Timeline plays the bag-overflow beat.
+	Dialogic.VAR.var_storage["locker_overpacked"] = 1
+	Dialogic.paused = false
 
 
 func _on_locker_cleanup_finished(result: Dictionary) -> void:
