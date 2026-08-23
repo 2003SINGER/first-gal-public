@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://83xpnm44s55q" path="res://scripts/narrative_bridge.gd" id="3_nb"]
 [ext_resource type="Script" uid="uid://c3j6bi6hvla5c" path="res://scripts/presentation/photo_viewer.gd" id="4_pv"]
 [ext_resource type="Script" path="res://scripts/interaction/interaction_controller.gd" id="5_ic"]
+[ext_resource type="PackedScene" path="res://scenes/presentation/history_overlay.tscn" id="6_history"]
 
 [node name="FirstGal" type="Node" unique_id=439158931]
 script = ExtResource("1_main")
@@ -38,6 +39,8 @@ script = ExtResource("4_pv")
 
 [node name="SFXPlayer" type="AudioStreamPlayer" parent="PresentationRoot" unique_id=991001001]
 stream_paused = false
+
+[node name="HistoryOverlay" parent="PresentationRoot" instance=ExtResource("6_history")]
 
 [node name="Overlay" type="Control" parent="PresentationRoot/PhotoViewer" unique_id=1789669492]
 visible = false
