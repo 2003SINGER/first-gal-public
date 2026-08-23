@@ -217,6 +217,55 @@ func _try_finish() -> void:
 	finished.emit(_build_result())
 
 
+# --- Dev-only quick skip ---------------------------------------------------
+# During development playtests, pressing Enter or Space fast-forwards the
+# cleanup so the flow can be observed without deciding every item. Only active
+# in debug builds; a release export never reaches this code path. The skip still
+# goes through the normal `finished` emit, so the interaction closes, Dialogic
+# resumes, and the downstream Timeline signal fire exactly as if the player had
+# finished. Normal buttons are never affected. It refuses to fire while the
+# overflow resolution is mid-flight, to avoid corrupting that transient state.
+const DEBUG_SKIP_ENABLED := true
+
+
+func _input(event: InputEvent) -> void:
+	if not _debug_skip_allowed():
+		return
+	if not (event is InputEventKey and event.pressed and not event.echo):
+		return
+	var key := event as InputEventKey
+	if key.keycode != KEY_ENTER and key.keycode != KEY_SPACE:
+		return
+	get_viewport().set_input_as_handled()
+	_debug_complete()
+
+
+func _debug_skip_allowed() -> bool:
+	return DEBUG_SKIP_ENABLED and OS.is_debug_build()
+
+
+func _debug_complete() -> void:
+	if not visible:
+		return
+	if resolving_overflow or suspended_for_overflow:
+		return
+	# Force every item into a decided, non-overflowing state, then finish.
+	var kept_count := 0
+	for item in ITEMS:
+		if item.get("is_photo_set", false):
+			states[item.id] = "collected"
+			continue
+		var dresult: String = item.get("discard_result", "discarded")
+		if dresult == "returned":
+			states[item.id] = "returned"
+		elif kept_count < MAX_KEPT:
+			states[item.id] = "kept"
+			kept_count += 1
+		else:
+			states[item.id] = "discarded_initially"
+	_try_finish()
+
+
 func resume_overflow() -> void:
 	if not suspended_for_overflow:
 		push_warning("LockerCleanup: resume_overflow() called without a suspended overflow.")

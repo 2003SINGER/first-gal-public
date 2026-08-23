@@ -65,6 +65,40 @@ func _try_finish() -> void:
 	finished.emit(result)
 
 
+# --- Dev-only quick skip ---------------------------------------------------
+# During development playtests, pressing Enter or Space fast-forwards the
+# inspection so the flow can be observed without clicking every item. Only
+# active in debug builds; a release export never reaches this code path. The
+# skip still goes through the normal `finished` emit, so the interaction closes,
+# Dialogic resumes, and the downstream Timeline signal fire exactly as if the
+# player had looked at everything. Normal buttons are never affected.
+const DEBUG_SKIP_ENABLED := true
+
+
+func _input(event: InputEvent) -> void:
+	if not _debug_skip_allowed():
+		return
+	if not (event is InputEventKey and event.pressed and not event.echo):
+		return
+	var key := event as InputEventKey
+	if key.keycode != KEY_ENTER and key.keycode != KEY_SPACE:
+		return
+	get_viewport().set_input_as_handled()
+	_debug_complete()
+
+
+func _debug_skip_allowed() -> bool:
+	return DEBUG_SKIP_ENABLED and OS.is_debug_build()
+
+
+func _debug_complete() -> void:
+	if not visible:
+		return
+	for item in ITEMS:
+		seen[item.id] = true
+	_try_finish()
+
+
 func _refresh() -> void:
 	var item := _item_for_id(selected_id)
 	if item.is_empty():
