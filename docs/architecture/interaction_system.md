@@ -86,9 +86,9 @@ InteractionController.locker_items_returned
 
 当前 5 件普通灰盒物品，外加 1 件特殊“照片袋”：
 
-- `sports_day_bib`：运动会号码布
-- `old_workbook`：旧练习册（红笔“别睡了”）
-- `ye_xiao_pen`：叶晓的笔（去向是“还给她”，走 `returned` 而非 `discarded`）
+- `sports_day_bib`：运动会号码布（B 档高中时间痕迹）
+- `dead_refill`：没水的笔芯（对应 S05 开场"一截笔芯滚出来……没水"；A 档真垃圾 / 普通残留代表，替换原 `old_workbook`）
+- `ye_xiao_pen`：叶晓的笔（去向是“还给她”，走 `returned` 而非 `discarded`；C 档未来回填槽位）
 - `freshman_map`：入学报到折页（替换原 `keychain_piece`）
 - `broken_ruler`：断尺（替换原 `used_paper`）
 - `photo_pack`：一袋照片（特殊项，`is_photo_set: true`；不计入容量、无 keep/discard，但必须至少检视一次；玩家主动点击或第一次点击“整理完毕”时自动打开，检视时在柜子面板内显示 `first_day_classroom` 照片）

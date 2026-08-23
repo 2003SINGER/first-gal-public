@@ -1,9 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://drqs360dk2hc2"]
 
-[ext_resource type="Script" path="res://dev/scripts/demo_current_runner.gd" id="1_runner"]
-[ext_resource type="PackedScene" path="res://scenes/main.tscn" id="2_main"]
+[ext_resource type="Script" uid="uid://bxbx71d2ct0bc" path="res://dev/scripts/demo_current_runner.gd" id="1_runner"]
+[ext_resource type="PackedScene" uid="uid://clcpjcllqcgog" path="res://scenes/main.tscn" id="2_main"]
 
-[node name="DemoCurrentRunner" type="Node"]
+[node name="DemoCurrentRunner" type="Node" unique_id=1974017648]
 script = ExtResource("1_runner")
 
-[node name="FirstGal" parent="." instance=ExtResource("2_main")]
+[node name="FirstGal" parent="." unique_id=757457689 instance=ExtResource("2_main")]
