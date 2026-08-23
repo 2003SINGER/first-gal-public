@@ -21,7 +21,13 @@ Dialogic="*uid://ds2q0uclmolvu"
 [dialogic]
 
 directories/dch_directory={
+"classmate": "res://dialogic/characters/classmate.dch",
+"classmate_deskmate": "res://dialogic/characters/classmate_deskmate.dch",
+"friend": "res://dialogic/characters/friend.dch",
+"friend_a": "res://dialogic/characters/friend_a.dch",
+"friend_b": "res://dialogic/characters/friend_b.dch",
 "hai_xiang": "res://dialogic/characters/hai_xiang.dch",
+"teacher": "res://dialogic/characters/teacher.dch",
 "ye_xiao": "res://dialogic/characters/ye_xiao.dch"
 }
 directories/dtl_directory={
@@ -38,7 +44,6 @@ layout/style_directory={
 }
 layout/style_list=["res://dialogic/styles/MainADV.tres"]
 layout/default_style="res://dialogic/styles/MainADV.tres"
-history/simple_history_enabled=true
 variables={}
 glossary/default_case_sensitive=true
 text/letter_speed=0.01
@@ -73,6 +78,7 @@ audio/channel_defaults={
 "volume": 0.0
 }
 }
+history/simple_history_enabled=true
 
 [display]
 
