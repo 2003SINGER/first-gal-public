@@ -22,7 +22,7 @@ Dialogic="*uid://ds2q0uclmolvu"
 
 directories/dch_directory={
 "classmate": "res://dialogic/characters/classmate.dch",
-"classmate_deskmate": "res://dialogic/characters/classmate_deskmate.dch",
+"classmate_deskmate": "res://dialogic/characters/li_xizhe.dch",
 "friend": "res://dialogic/characters/friend.dch",
 "friend_a": "res://dialogic/characters/friend_a.dch",
 "friend_b": "res://dialogic/characters/friend_b.dch",

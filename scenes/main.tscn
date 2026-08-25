@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cedfmj2wmq662" path="res://scripts/scene_controller.gd" id="2_sc"]
 [ext_resource type="Script" uid="uid://83xpnm44s55q" path="res://scripts/narrative_bridge.gd" id="3_nb"]
 [ext_resource type="Script" uid="uid://c3j6bi6hvla5c" path="res://scripts/presentation/photo_viewer.gd" id="4_pv"]
-[ext_resource type="Script" path="res://scripts/interaction/interaction_controller.gd" id="5_ic"]
+[ext_resource type="Script" uid="uid://bga37xdryjsaw" path="res://scripts/interaction/interaction_controller.gd" id="5_ic"]
 [ext_resource type="PackedScene" path="res://scenes/presentation/history_overlay.tscn" id="6_history"]
 
 [node name="FirstGal" type="Node" unique_id=439158931]
@@ -37,11 +37,6 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_pv")
 
-[node name="SFXPlayer" type="AudioStreamPlayer" parent="PresentationRoot" unique_id=991001001]
-stream_paused = false
-
-[node name="HistoryOverlay" parent="PresentationRoot" instance=ExtResource("6_history")]
-
 [node name="Overlay" type="Control" parent="PresentationRoot/PhotoViewer" unique_id=1789669492]
 visible = false
 anchors_preset = 0
@@ -70,11 +65,16 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
+[node name="SFXPlayer" type="AudioStreamPlayer" parent="PresentationRoot" unique_id=991001001]
+
+[node name="HistoryOverlay" parent="PresentationRoot" unique_id=1399226719 instance=ExtResource("6_history")]
+layout_mode = 1
+
 [node name="SceneController" type="Node" parent="." unique_id=1722051607]
 script = ExtResource("2_sc")
 
 [node name="NarrativeBridge" type="Node" parent="." unique_id=86175372]
 script = ExtResource("3_nb")
 
-[node name="InteractionController" type="Node" parent="."]
+[node name="InteractionController" type="Node" parent="." unique_id=1975957576]
 script = ExtResource("5_ic")
