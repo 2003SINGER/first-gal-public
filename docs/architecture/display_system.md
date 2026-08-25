@@ -2,7 +2,7 @@
 
 > Scope: minimal production shell built for the transition from "experiment" to
 > formal Demo. Build per Timeline order (S01→S17); do NOT pre-build managers.
-> Last updated: 2026-08-21.
+> Last updated: 2026-08-25. Base game shell details live in `game_shell_system.md`.
 
 ## 1. SceneTree (res://scenes/main.tscn — root `FirstGal`)
 
@@ -17,7 +17,8 @@ FirstGal (Node, scripts/main.gd)
 │           └─ Photo   (TextureRect, keep_aspect_covered, mouse_filter=IGNORE)
 ├─ SceneController     (Node, scripts/scene_controller.gd)
 ├─ NarrativeBridge    (Node, scripts/narrative_bridge.gd)
-└─ InteractionController (Node, scripts/interaction/interaction_controller.gd)
+├─ InteractionController (Node, scripts/interaction/interaction_controller.gd)
+└─ UIRoot             (CanvasLayer, scenes/system/system_ui.tscn)
 ```
 
 Layering bottom→top: **World (SceneHost) → Photo (PresentationRoot) → Dialogic
@@ -72,10 +73,11 @@ or SceneTree structure — only these ids.
   Dialogic Background Event may stay for plugin/experiment timelines only.
 
 ## 9. Not implemented yet (do not pre-build)
-Inventory, save, title/settings, AudioManager, CG system, custom Dialogic Event,
-LLM compiler, phone UI, camera system, full Hotspot framework, relationship/
-maturity numbers, many Autoloads, universal VisualManager, and formal Ending UI or
-Credits. Build each only when its Timeline needs it.
+Inventory, formal AudioManager, CG system, custom Dialogic Event, LLM compiler,
+phone UI, full Hotspot framework, relationship/maturity numbers, universal
+VisualManager, and formal Ending UI or Credits. Build each only when its Timeline
+needs it. The implemented title, save/load, settings, input and UIRoot boundary is
+documented in `game_shell_system.md`.
 
 ## 10. Current production slice: S01–S17
 - `01_return_to_school.dtl`: S01–S04.
@@ -87,8 +89,9 @@ Credits. Build each only when its Timeline needs it.
 - S05 emits `interaction:locker_cleanup`; S11 emits `interaction:desk_cleanup`.
   Each modal interaction pauses Dialogic and resumes it after its own `finished(result)`.
 - S17 shows `photo:graduation_selfie` and the text `Demo End`; the Timeline then ends.
-- Development runner: open `res://dev/scenes/demo_current_runner.tscn` and press F6.
-  `main.tscn` deliberately remains neutral and therefore still begins at `blank`.
+- Project run starts at `res://scenes/title/title_screen.tscn`; Start Game creates a
+  new `main.tscn` session and starts S01. Development runner remains
+  `res://dev/scenes/demo_current_runner.tscn` for direct timeline work.
 
 ## 11. Next step
 Play through S13–S17 with the graybox runner and inspect the placeholder montage,

@@ -8,6 +8,8 @@ extends Node
 ## The registry is intentionally a hard-coded Dictionary for now. Do NOT build a
 ## JSON manifest / ResourceCatalog / database yet — that is premature.
 
+signal scene_changed(scene_id: String)
+
 var scene_host: Control = null
 
 const SCENES := {
@@ -25,6 +27,7 @@ const SCENES := {
 }
 
 var current_scene: Node = null
+var current_scene_id := ""
 
 
 func setup(host: Control) -> void:
@@ -47,3 +50,5 @@ func change_scene(scene_id: String) -> void:
 	var packed: PackedScene = SCENES[scene_id]
 	current_scene = packed.instantiate()
 	scene_host.add_child(current_scene)
+	current_scene_id = scene_id
+	scene_changed.emit(scene_id)

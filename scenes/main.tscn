@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://c3j6bi6hvla5c" path="res://scripts/presentation/photo_viewer.gd" id="4_pv"]
 [ext_resource type="Script" uid="uid://bga37xdryjsaw" path="res://scripts/interaction/interaction_controller.gd" id="5_ic"]
 [ext_resource type="PackedScene" path="res://scenes/presentation/history_overlay.tscn" id="6_history"]
+[ext_resource type="PackedScene" path="res://scenes/system/system_ui.tscn" id="7_system_ui"]
 
 [node name="FirstGal" type="Node" unique_id=439158931]
 script = ExtResource("1_main")
@@ -78,3 +79,5 @@ script = ExtResource("3_nb")
 
 [node name="InteractionController" type="Node" parent="." unique_id=1975957576]
 script = ExtResource("5_ic")
+
+[node name="UIRoot" parent="." instance=ExtResource("7_system_ui")]

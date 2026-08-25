@@ -14,6 +14,12 @@ func _ready() -> void:
 	$SceneController.setup(scene_host)
 	$NarrativeBridge.setup($SceneController, photo_viewer, $InteractionController, sfx_player)
 	$InteractionController.setup_bridge($NarrativeBridge)
+	sfx_player.bus = &"SFX"
 
 	# Neutral default until a Demo timeline tells us where we are.
 	$SceneController.change_scene("blank")
+	GameSession.attach_runtime($SceneController, $UIRoot, $InteractionController)
+
+
+func _exit_tree() -> void:
+	GameSession.detach_runtime()

@@ -1,0 +1,215 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/title/title_screen.gd" id="1_script"]
+
+[node name="TitleScreen" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Sky" type="Polygon2D" parent="World"]
+polygon = PackedVector2Array(-600, -400, 2600, -400, 2600, 1500, -600, 1500)
+color = Color(0.18, 0.35, 0.56, 1)
+
+[node name="CloudBand" type="Polygon2D" parent="World"]
+polygon = PackedVector2Array(-300, 220, 2300, 120, 2300, 420, -300, 520)
+color = Color(0.52, 0.67, 0.78, 0.35)
+
+[node name="Rooftop" type="Polygon2D" parent="World"]
+polygon = PackedVector2Array(-300, 780, 2300, 650, 2300, 1250, -300, 1250)
+color = Color(0.12, 0.15, 0.2, 1)
+
+[node name="Railing" type="Polygon2D" parent="World"]
+polygon = PackedVector2Array(300, 660, 1740, 600, 1740, 640, 300, 700)
+color = Color(0.06, 0.08, 0.11, 1)
+
+[node name="CharacterPlaceholder" type="Polygon2D" parent="World"]
+polygon = PackedVector2Array(1065, 520, 1140, 500, 1200, 560, 1185, 700, 1080, 690, 1025, 615)
+color = Color(0.05, 0.05, 0.07, 1)
+
+[node name="CharacterNote" type="Label" parent="World"]
+offset_left = 1000.0
+offset_top = 715.0
+offset_right = 1280.0
+offset_bottom = 760.0
+theme_override_colors/font_color = Color(0.8, 0.85, 0.9, 0.85)
+theme_override_font_sizes/font_size = 18
+text = "title art placeholder"
+horizontal_alignment = 1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1110, 560)
+zoom = Vector2(2.45, 2.45)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="MenuUI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="CanvasLayer/MenuUI"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 135.0
+offset_right = 700.0
+offset_bottom = 245.0
+theme_override_colors/font_color = Color(0.95, 0.97, 1, 1)
+theme_override_font_sizes/font_size = 58
+text = "毕业日"
+
+[node name="Subtitle" type="Label" parent="CanvasLayer/MenuUI"]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 240.0
+offset_right = 700.0
+offset_bottom = 290.0
+theme_override_colors/font_color = Color(0.8, 0.86, 0.93, 1)
+theme_override_font_sizes/font_size = 20
+text = "校园成长 Galgame · Demo"
+
+[node name="Start" type="Button" parent="CanvasLayer/MenuUI"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 380.0
+offset_right = 430.0
+offset_bottom = 435.0
+text = "开始游戏"
+
+[node name="Load" type="Button" parent="CanvasLayer/MenuUI"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 452.0
+offset_right = 430.0
+offset_bottom = 507.0
+text = "读取存档"
+
+[node name="Settings" type="Button" parent="CanvasLayer/MenuUI"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 524.0
+offset_right = 430.0
+offset_bottom = 579.0
+text = "设置"
+
+[node name="Quit" type="Button" parent="CanvasLayer/MenuUI"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 596.0
+offset_right = 430.0
+offset_bottom = 651.0
+text = "退出"
+
+[node name="LoadPanel" type="Panel" parent="CanvasLayer/MenuUI"]
+layout_mode = 0
+offset_left = 770.0
+offset_top = 150.0
+offset_right = 1720.0
+offset_bottom = 900.0
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/MenuUI/LoadPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = 30.0
+offset_right = -36.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="VBoxContainer" parent="CanvasLayer/MenuUI/LoadPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="CanvasLayer/MenuUI/LoadPanel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "读取存档"
+horizontal_alignment = 1
+
+[node name="SlotList" type="VBoxContainer" parent="CanvasLayer/MenuUI/LoadPanel/Margin/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="Back" type="Button" parent="CanvasLayer/MenuUI/LoadPanel/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+text = "返回"
+
+[node name="SettingsPanel" type="Panel" parent="CanvasLayer/MenuUI"]
+layout_mode = 0
+offset_left = 770.0
+offset_top = 210.0
+offset_right = 1510.0
+offset_bottom = 820.0
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/MenuUI/SettingsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 42.0
+offset_top = 36.0
+offset_right = -42.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="VBoxContainer" parent="CanvasLayer/MenuUI/SettingsPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="CanvasLayer/MenuUI/SettingsPanel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "设置"
+horizontal_alignment = 1
+
+[node name="BGMLabel" type="Label" parent="CanvasLayer/MenuUI/SettingsPanel/Margin/Layout"]
+layout_mode = 2
+text = "BGM 音量"
+
+[node name="BGM" type="HSlider" parent="CanvasLayer/MenuUI/SettingsPanel/Margin/Layout"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.8
+
+[node name="SELabel" type="Label" parent="CanvasLayer/MenuUI/SettingsPanel/Margin/Layout"]
+layout_mode = 2
+text = "SE 音量"
+
+[node name="SE" type="HSlider" parent="CanvasLayer/MenuUI/SettingsPanel/Margin/Layout"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.8
+
+[node name="TextSpeedLabel" type="Label" parent="CanvasLayer/MenuUI/SettingsPanel/Margin/Layout"]
+layout_mode = 2
+text = "文本速度"
+
+[node name="TextSpeed" type="HSlider" parent="CanvasLayer/MenuUI/SettingsPanel/Margin/Layout"]
+layout_mode = 2
+min_value = 0.1
+max_value = 3.0
+step = 0.1
+value = 1.0
+
+[node name="Fullscreen" type="CheckButton" parent="CanvasLayer/MenuUI/SettingsPanel/Margin/Layout"]
+layout_mode = 2
+text = "全屏"
+
+[node name="Back" type="Button" parent="CanvasLayer/MenuUI/SettingsPanel/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+text = "返回"

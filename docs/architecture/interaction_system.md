@@ -82,6 +82,8 @@ InteractionController.locker_items_returned
 
 这不是存档，也不是完整 GameState。`overpacked_once` / `locker_overpacked` 仅用于 S05 结束时的即时分支，是演出状态，不长期保存。
 
+基础存档系统已实现，但在 LockerCleanup 或 DeskCleanup 仍处于打开／等待恢复的局部状态时会拒绝保存。这样不会把无法完整恢复的交互面板伪装为正常存档；最终 `finished(result)` 后，Dialogic 变量会随基础存档保存。
+
 ## 当前物品与容量规则
 
 当前 5 件普通灰盒物品，外加 1 件特殊“照片袋”：
@@ -146,8 +148,8 @@ res://dev/scenes/demo_current_runner.tscn
 ```
 
 按 F6，流程为：S01 → S02 → S03 → S04 → S05 LockerCleanup → S06 → S07 → S08 → S09 → S10 → S11 DeskCleanup → S12 → S13 → S14 → S15 → S16 → S17 → Demo End。
-`res://scenes/main.tscn` 仍然是 blank shell，不会自动启动 Demo。
+项目启动会先经过 TitleScreen；开发 runner 仍可绕过标题，直接检查 Demo。
 
 ## 当前没有实现
 
-没有实现正式 Inventory、存档、正式 GameState、Hotspot 通用框架、手机 UI、正式 MemoryManager、CG、AudioManager、标题、Settings、正式 Ending UI、Credits、成熟度或关系数值，也没有修改 `res://addons/dialogic/`。
+没有实现正式 Inventory、正式 GameState、Hotspot 通用框架、手机 UI、正式 MemoryManager、CG、正式 AudioManager、正式 Ending UI、Credits、成熟度或关系数值，也没有修改 `res://addons/dialogic/`。基础 TitleScreen、存档、设置和系统 UI 已由 `game_shell_system.md` 说明。

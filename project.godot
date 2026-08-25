@@ -11,12 +11,16 @@ config_version=5
 [application]
 
 config/name="First Gal"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/title/title_screen.tscn"
 config/features=PackedStringArray("4.7")
 
 [autoload]
 
 Dialogic="*uid://ds2q0uclmolvu"
+InputManager="*res://scripts/system/input_manager.gd"
+GameSettings="*res://scripts/system/game_settings.gd"
+SaveService="*res://scripts/system/save_service.gd"
+GameSession="*res://scripts/system/game_session.gd"
 
 [dialogic]
 

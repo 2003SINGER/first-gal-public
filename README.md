@@ -8,19 +8,19 @@
 - [Demo 场景流程卡](docs/narrative/demo_scene_flow.md)：当前 Demo 的 Canonical 流程与不可违背约束。
 - [Demo 阅读剧本](docs/script/demo_script.md)：S01–S17 的逐场文本与演出备注。
 - [个人语言与互动风格画像](docs/narrative/voice/个人语言与互动风格画像.md)：海象声线、关系互动与协作写作参考。
-- [显示系统](docs/architecture/display_system.md) 与 [交互系统](docs/architecture/interaction_system.md)：现有 Godot 灰盒边界。
+- [显示系统](docs/architecture/display_system.md)、[交互系统](docs/architecture/interaction_system.md) 与 [基础游戏壳](docs/architecture/game_shell_system.md)：现有 Godot 灰盒与基础运行边界。
 
 修改优先级：作品级判断回到企划书；Demo 的流程/约束回到场景流程卡；台词与镜头落在阅读剧本；实现细节回到架构文档与代码。不要用某一份文档替代另一份的职责。
 
 ## 运行当前 Demo
 
-当前完整流程入口是 `res://dev/scenes/demo_current_runner.tscn`：在 Godot 中打开它并按 F6。
+启动项目（F6）会先进入 `res://scenes/title/title_screen.tscn`：标题演出结束后可开始、读取、设置或退出。开始游戏会进入当前 Demo。
 
-`res://scenes/main.tscn` 是展示壳，不会自行启动 Demo。当前流程为 S01 → S17；柜子与桌子两段会暂停 Dialogic，进入各自的整理交互。
+开发时若只想从 S01 直接检查剧情，可打开 `res://dev/scenes/demo_current_runner.tscn` 并按 F6；它会绕过标题菜单。当前流程为 S01 → S17；柜子与桌子两段会暂停 Dialogic，进入各自的整理交互。
 
 ## Included tools
 
 - Godot 4.7.1 editor: `tools/godot-4.7.1/Godot_v4.7.1-stable_win64.exe`
 - Dialogic 2 Alpha 21 (vendored at commit `fd0fa22c335c72583b89b35699f9fb19dd1b4eae`): `addons/dialogic`
 
-Dialogic is enabled only for evaluation. The game's saves and core story state will remain project-owned rather than depend on the plugin.
+Dialogic is enabled only for evaluation. The game's save files and core session boundary remain project-owned; Dialogic only provides the timeline state captured by that system.

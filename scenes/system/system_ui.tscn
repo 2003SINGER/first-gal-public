@@ -1,0 +1,196 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/system/system_ui.gd" id="1_script"]
+
+[node name="UIRoot" type="CanvasLayer"]
+layer = 30
+script = ExtResource("1_script")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Dim" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
+
+[node name="Menu" type="Panel" parent="Root"]
+layout_mode = 0
+offset_left = 700.0
+offset_top = 260.0
+offset_right = 1220.0
+offset_bottom = 820.0
+
+[node name="Margin" type="MarginContainer" parent="Root/Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = 36.0
+offset_right = -36.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="VBoxContainer" parent="Root/Menu/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Root/Menu/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "菜单"
+horizontal_alignment = 1
+
+[node name="Resume" type="Button" parent="Root/Menu/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "继续"
+
+[node name="Save" type="Button" parent="Root/Menu/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "保存"
+
+[node name="Load" type="Button" parent="Root/Menu/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "读取"
+
+[node name="Settings" type="Button" parent="Root/Menu/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "设置"
+
+[node name="Title" type="Button" parent="Root/Menu/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "返回标题"
+
+[node name="SaveLoad" type="Panel" parent="Root"]
+layout_mode = 0
+offset_left = 470.0
+offset_top = 160.0
+offset_right = 1450.0
+offset_bottom = 920.0
+
+[node name="Margin" type="MarginContainer" parent="Root/SaveLoad"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = 30.0
+offset_right = -36.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="VBoxContainer" parent="Root/SaveLoad/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Root/SaveLoad/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "存档"
+horizontal_alignment = 1
+
+[node name="SlotList" type="VBoxContainer" parent="Root/SaveLoad/Margin/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="Back" type="Button" parent="Root/SaveLoad/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+text = "返回"
+
+[node name="Settings" type="Panel" parent="Root"]
+layout_mode = 0
+offset_left = 570.0
+offset_top = 230.0
+offset_right = 1350.0
+offset_bottom = 850.0
+
+[node name="Margin" type="MarginContainer" parent="Root/Settings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 42.0
+offset_top = 36.0
+offset_right = -42.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="VBoxContainer" parent="Root/Settings/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Root/Settings/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "设置"
+horizontal_alignment = 1
+
+[node name="BGMLabel" type="Label" parent="Root/Settings/Margin/Layout"]
+layout_mode = 2
+text = "BGM 音量"
+
+[node name="BGM" type="HSlider" parent="Root/Settings/Margin/Layout"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.8
+
+[node name="SELabel" type="Label" parent="Root/Settings/Margin/Layout"]
+layout_mode = 2
+text = "SE 音量"
+
+[node name="SE" type="HSlider" parent="Root/Settings/Margin/Layout"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.8
+
+[node name="TextSpeedLabel" type="Label" parent="Root/Settings/Margin/Layout"]
+layout_mode = 2
+text = "文本速度"
+
+[node name="TextSpeed" type="HSlider" parent="Root/Settings/Margin/Layout"]
+layout_mode = 2
+min_value = 0.1
+max_value = 3.0
+step = 0.1
+value = 1.0
+
+[node name="Fullscreen" type="CheckButton" parent="Root/Settings/Margin/Layout"]
+layout_mode = 2
+text = "全屏"
+
+[node name="Back" type="Button" parent="Root/Settings/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+text = "返回"
+
+[node name="SystemMessage" type="Label" parent="Root"]
+layout_mode = 0
+offset_left = 700.0
+offset_top = 940.0
+offset_right = 1220.0
+offset_bottom = 990.0
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
