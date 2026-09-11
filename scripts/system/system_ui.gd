@@ -5,21 +5,29 @@ extends CanvasLayer
 
 var session: Node = null
 var mode := ""
+var adv_controller: Node = null
 
 @onready var root: Control = $Root
 @onready var menu_panel: Panel = $Root/Menu
 @onready var save_load_panel: Panel = $Root/SaveLoad
 @onready var settings_panel: Panel = $Root/Settings
 @onready var slot_list: VBoxContainer = $Root/SaveLoad/Margin/Layout/SlotList
-@onready var save_load_title: Label = $Root/SaveLoad/Margin/Layout/Title
+@onready var save_load_title: Label = $Root/SaveLoad/Margin/Layout/SaveLoadTitle
 @onready var message: Label = $Root/SystemMessage
 @onready var bgm_slider: HSlider = $Root/Settings/Margin/Layout/BGM
 @onready var se_slider: HSlider = $Root/Settings/Margin/Layout/SE
 @onready var text_speed_slider: HSlider = $Root/Settings/Margin/Layout/TextSpeed
 @onready var fullscreen_toggle: CheckButton = $Root/Settings/Margin/Layout/Fullscreen
+@onready var adv_bar: PanelContainer = $AdvBar
+@onready var adv_auto: Button = $AdvBar/Layout/Auto
+@onready var adv_skip: Button = $AdvBar/Layout/Skip
+@onready var adv_hide: Button = $AdvBar/Layout/Hide
 
 
 func _ready() -> void:
+	# Resolve by path instead of a compile-time autoload identifier. This keeps the
+	# scene script loadable while Godot refreshes project autoload metadata.
+	adv_controller = get_node_or_null("/root/AdvController")
 	root.hide()
 	menu_panel.show()
 	save_load_panel.hide()
@@ -28,17 +36,27 @@ func _ready() -> void:
 	$Root/Menu/Margin/Layout/Save.pressed.connect(open_save)
 	$Root/Menu/Margin/Layout/Load.pressed.connect(open_load)
 	$Root/Menu/Margin/Layout/Settings.pressed.connect(open_settings)
-	$Root/Menu/Margin/Layout/Title.pressed.connect(_return_to_title)
+	$Root/Menu/Margin/Layout/ReturnToTitle.pressed.connect(_return_to_title)
 	$Root/SaveLoad/Margin/Layout/Back.pressed.connect(open_menu)
 	$Root/Settings/Margin/Layout/Back.pressed.connect(open_menu)
 	bgm_slider.value_changed.connect(func(value: float) -> void: GameSettings.set_value(&"bgm_volume", value))
 	se_slider.value_changed.connect(func(value: float) -> void: GameSettings.set_value(&"se_volume", value))
 	text_speed_slider.value_changed.connect(func(value: float) -> void: GameSettings.set_value(&"text_speed", value))
 	fullscreen_toggle.toggled.connect(func(value: bool) -> void: GameSettings.set_value(&"fullscreen", value))
+	if adv_controller != null:
+		adv_auto.pressed.connect(adv_controller.call.bind("toggle_auto"))
+		adv_skip.pressed.connect(adv_controller.call.bind("toggle_skip"))
+		$AdvBar/Layout/Log.pressed.connect(adv_controller.call.bind("open_log"))
+		adv_hide.pressed.connect(adv_controller.call.bind("toggle_textbox"))
+		adv_controller.connect("auto_changed", _refresh_adv_controls)
+		adv_controller.connect("skip_changed", _refresh_adv_controls)
+		adv_controller.connect("textbox_hidden_changed", _refresh_adv_controls)
+	_refresh_adv_controls()
 
 
 func setup(owner: Node) -> void:
 	session = owner
+	_refresh_adv_controls()
 
 
 func toggle_menu() -> void:
@@ -153,3 +171,13 @@ func _return_to_title() -> void:
 	if Dialogic != null:
 		Dialogic.end_timeline(true)
 	get_tree().change_scene_to_file("res://scenes/title/title_screen.tscn")
+
+
+func _refresh_adv_controls(_unused: Variant = null) -> void:
+	if adv_controller == null:
+		adv_bar.hide()
+		return
+	adv_auto.text = "AUTO%s" % (" ✓" if bool(adv_controller.call("is_auto_enabled")) else "")
+	adv_skip.text = "SKIP%s" % (" ✓" if bool(adv_controller.call("is_skip_enabled")) else "")
+	adv_hide.text = "SHOW" if bool(adv_controller.call("is_textbox_hidden")) else "HIDE"
+	adv_bar.visible = GameSession != null and GameSession.is_in_game

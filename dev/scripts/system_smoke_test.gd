@@ -63,11 +63,25 @@ func _run() -> void:
 		push_error("System smoke: settings were not applied to runtime services.")
 		get_tree().quit(1)
 		return
-	for action in [InputManager.CONFIRM, InputManager.CANCEL, InputManager.MENU, InputManager.SAVE, InputManager.LOAD]:
+	for action in [InputManager.CONFIRM, InputManager.CANCEL, InputManager.MENU, InputManager.SAVE, InputManager.LOAD, InputManager.ADV_AUTO, InputManager.ADV_LOG, InputManager.ADV_HIDE]:
 		if not InputMap.has_action(action):
 			push_error("System smoke: missing input action %s." % action)
 			get_tree().quit(1)
 			return
+	if not ui.has_node("AdvBar") or not runtime.has_node("AudioBridge") or not runtime.get_node("PresentationRoot").has_node("TransitionOverlay"):
+		push_error("System smoke: ADV, audio, or transition surface is missing.")
+		get_tree().quit(1)
+		return
+	AdvController.toggle_auto()
+	if not AdvController.is_auto_enabled():
+		push_error("System smoke: AUTO controller did not enable Dialogic auto advance.")
+		get_tree().quit(1)
+		return
+	AdvController.toggle_auto()
+	if AdvController.is_auto_enabled():
+		push_error("System smoke: AUTO controller did not disable Dialogic auto advance.")
+		get_tree().quit(1)
+		return
 	runtime.get_node("SceneController").change_scene("school_gate")
 	for _frame in 4:
 		await get_tree().process_frame
@@ -100,6 +114,10 @@ func _run() -> void:
 		push_error("System smoke: title menu did not appear after intro animation.")
 		get_tree().quit(1)
 		return
+	if not title.continue_button.visible or not title.continue_button.pressed.is_connected(title._continue_game):
+		push_error("System smoke: title Continue Game did not bind the autosave path.")
+		get_tree().quit(1)
+		return
 	if not title.get_node("CanvasLayer/MenuUI/Start").pressed.is_connected(GameSession.begin_new_game):
 		push_error("System smoke: title Start Game is not wired to GameSession.")
 		get_tree().quit(1)
@@ -107,6 +125,13 @@ func _run() -> void:
 	title._open_load()
 	if title.slot_list.get_child_count() != SaveService.SLOT_COUNT:
 		push_error("System smoke: title load UI did not build ten slots.")
+		get_tree().quit(1)
+		return
+	runtime.get_node("NarrativeBridge")._on_dialogic_signal("system:demo_end")
+	await get_tree().create_timer(0.5).timeout
+	var end_card = runtime.get_node("DemoEndCard")
+	if not end_card.root.visible or not Dialogic.paused:
+		push_error("System smoke: explicit Demo End command did not open its end card.")
 		get_tree().quit(1)
 		return
 	print("SYSTEM_SMOKE_OK timeline=%s scene=%s" % [metadata["timeline"], metadata["scene"]])

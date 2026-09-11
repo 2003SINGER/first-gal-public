@@ -1,0 +1,67 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://dev/scripts/dev_chapter_launcher.gd" id="1_launcher"]
+[ext_resource type="PackedScene" path="res://scenes/main.tscn" id="2_main"]
+
+[node name="DevChapterLauncher" type="Node"]
+script = ExtResource("1_launcher")
+
+[node name="FirstGal" parent="." instance=ExtResource("2_main")]
+
+[node name="DevUI" type="CanvasLayer" parent="."]
+layer = 80
+
+[node name="Panel" type="PanelContainer" parent="DevUI"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 340.0
+
+[node name="Margin" type="MarginContainer" parent="DevUI/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Layout" type="VBoxContainer" parent="DevUI/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="DevUI/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "DEV · Chapter Jump"
+
+[node name="Chapters" type="HBoxContainer" parent="DevUI/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="S01" type="Button" parent="DevUI/Panel/Margin/Layout/Chapters"]
+layout_mode = 2
+text = "S01"
+
+[node name="S05" type="Button" parent="DevUI/Panel/Margin/Layout/Chapters"]
+layout_mode = 2
+text = "S05"
+
+[node name="S11" type="Button" parent="DevUI/Panel/Margin/Layout/Chapters"]
+layout_mode = 2
+text = "S11"
+
+[node name="S14" type="Button" parent="DevUI/Panel/Margin/Layout/Chapters"]
+layout_mode = 2
+text = "S14"
+
+[node name="S17" type="Button" parent="DevUI/Panel/Margin/Layout/Chapters"]
+layout_mode = 2
+text = "S17"
+
+[node name="Hint" type="Label" parent="DevUI/Panel/Margin/Layout"]
+layout_mode = 2
+autowrap_mode = 2
+text = "整理交互沿用其已有 debug skip；本面板不写入 release UI。"
+
+[node name="Status" type="Label" parent="DevUI/Panel/Margin/Layout"]
+layout_mode = 2
+text = "Starting…"

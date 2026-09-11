@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/system/demo_end_controller.gd" id="1_end"]
+
+[node name="DemoEndCard" type="CanvasLayer"]
+layer = 50
+script = ExtResource("1_end")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Black" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Root"]
+layout_mode = 0
+offset_left = 660.0
+offset_top = 350.0
+offset_right = 1260.0
+offset_bottom = 730.0
+
+[node name="Margin" type="MarginContainer" parent="Root/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 48
+
+[node name="Layout" type="VBoxContainer" parent="Root/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="EndTitle" type="Label" parent="Root/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Demo End"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Root/Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "感谢游玩。"
+horizontal_alignment = 1
+
+[node name="Replay" type="Button" parent="Root/Panel/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "重新开始"
+
+[node name="ReturnTitle" type="Button" parent="Root/Panel/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+text = "返回标题"

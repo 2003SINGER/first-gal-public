@@ -7,6 +7,7 @@
 # S01｜上学路
 # =============================================================================
 [signal arg="scene:blank"]
+[signal arg="chapter:before_goodbye"]
 
 手机震了一下。
 
@@ -38,6 +39,8 @@ hai_xiang: 都在。
 [signal arg="scene:school_gate"]
 
 进校门以后，在脚下铺开的还是平时那条路。
+
+[signal arg="scene:school_path"]
 
 不过，在天天都几乎在赶路的小道上，今天却不自觉走得格外慢。
 

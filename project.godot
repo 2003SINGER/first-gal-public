@@ -21,16 +21,18 @@ InputManager="*res://scripts/system/input_manager.gd"
 GameSettings="*res://scripts/system/game_settings.gd"
 SaveService="*res://scripts/system/save_service.gd"
 GameSession="*res://scripts/system/game_session.gd"
+AdvController="*res://scripts/system/adv_controller.gd"
+ExtrasProgress="*res://scripts/system/extras_progress.gd"
 
 [dialogic]
 
 directories/dch_directory={
 "classmate": "res://dialogic/characters/classmate.dch",
-"classmate_deskmate": "res://dialogic/characters/li_xizhe.dch",
 "friend": "res://dialogic/characters/friend.dch",
 "friend_a": "res://dialogic/characters/friend_a.dch",
 "friend_b": "res://dialogic/characters/friend_b.dch",
 "hai_xiang": "res://dialogic/characters/hai_xiang.dch",
+"li_xizhe": "res://dialogic/characters/li_xizhe.dch",
 "teacher": "res://dialogic/characters/teacher.dch",
 "ye_xiao": "res://dialogic/characters/ye_xiao.dch"
 }
@@ -83,6 +85,7 @@ audio/channel_defaults={
 }
 }
 history/simple_history_enabled=true
+history/visited_event_history_enabled=true
 
 [display]
 
@@ -113,3 +116,4 @@ dialogic_default_action={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

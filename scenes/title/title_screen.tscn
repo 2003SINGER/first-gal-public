@@ -62,7 +62,7 @@ offset_right = 700.0
 offset_bottom = 245.0
 theme_override_colors/font_color = Color(0.95, 0.97, 1, 1)
 theme_override_font_sizes/font_size = 58
-text = "毕业日"
+text = "First Gal"
 
 [node name="Subtitle" type="Label" parent="CanvasLayer/MenuUI"]
 layout_mode = 0
@@ -74,37 +74,53 @@ theme_override_colors/font_color = Color(0.8, 0.86, 0.93, 1)
 theme_override_font_sizes/font_size = 20
 text = "校园成长 Galgame · Demo"
 
-[node name="Start" type="Button" parent="CanvasLayer/MenuUI"]
+[node name="Continue" type="Button" parent="CanvasLayer/MenuUI"]
 layout_mode = 0
 offset_left = 130.0
 offset_top = 380.0
 offset_right = 430.0
 offset_bottom = 435.0
-text = "开始游戏"
+text = "继续游戏"
 
-[node name="Load" type="Button" parent="CanvasLayer/MenuUI"]
+[node name="Start" type="Button" parent="CanvasLayer/MenuUI"]
 layout_mode = 0
 offset_left = 130.0
 offset_top = 452.0
 offset_right = 430.0
 offset_bottom = 507.0
-text = "读取存档"
+text = "开始新游戏"
 
-[node name="Settings" type="Button" parent="CanvasLayer/MenuUI"]
+[node name="Load" type="Button" parent="CanvasLayer/MenuUI"]
 layout_mode = 0
 offset_left = 130.0
 offset_top = 524.0
 offset_right = 430.0
 offset_bottom = 579.0
-text = "设置"
+text = "读取存档"
 
-[node name="Quit" type="Button" parent="CanvasLayer/MenuUI"]
+[node name="Settings" type="Button" parent="CanvasLayer/MenuUI"]
 layout_mode = 0
 offset_left = 130.0
 offset_top = 596.0
 offset_right = 430.0
 offset_bottom = 651.0
+text = "设置"
+
+[node name="Quit" type="Button" parent="CanvasLayer/MenuUI"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 740.0
+offset_right = 430.0
+offset_bottom = 795.0
 text = "退出"
+
+[node name="Extras" type="Button" parent="CanvasLayer/MenuUI"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 668.0
+offset_right = 430.0
+offset_bottom = 723.0
+text = "鉴赏"
 
 [node name="LoadPanel" type="Panel" parent="CanvasLayer/MenuUI"]
 layout_mode = 0
@@ -151,6 +167,56 @@ offset_left = 770.0
 offset_top = 210.0
 offset_right = 1510.0
 offset_bottom = 820.0
+
+[node name="ExtrasPanel" type="Panel" parent="CanvasLayer/MenuUI"]
+layout_mode = 0
+offset_left = 770.0
+offset_top = 300.0
+offset_right = 1430.0
+offset_bottom = 700.0
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/MenuUI/ExtrasPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 42.0
+offset_top = 36.0
+offset_right = -42.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="VBoxContainer" parent="CanvasLayer/MenuUI/ExtrasPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ExtrasTitle" type="Label" parent="CanvasLayer/MenuUI/ExtrasPanel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "鉴赏"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="CanvasLayer/MenuUI/ExtrasPanel/Margin/Layout"]
+layout_mode = 2
+autowrap_mode = 2
+text = "已收录的演出会出现在这里。"
+horizontal_alignment = 1
+
+[node name="TitleAnimation" type="Button" parent="CanvasLayer/MenuUI/ExtrasPanel/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 58)
+text = "标题动画"
+
+[node name="DemoRecollection" type="Button" parent="CanvasLayer/MenuUI/ExtrasPanel/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 58)
+text = "毕业日 Demo 回忆（通关后解锁）"
+
+[node name="Back" type="Button" parent="CanvasLayer/MenuUI/ExtrasPanel/Margin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 50)
+text = "返回"
 
 [node name="Margin" type="MarginContainer" parent="CanvasLayer/MenuUI/SettingsPanel"]
 layout_mode = 1

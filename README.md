@@ -4,7 +4,7 @@
 
 ## 试玩灰盒 Demo
 
-当前 Windows 试玩版只包含已经接通的基础系统与剧情灰盒：标题、S01–S17 的流程，以及两段整理交互。美术（包括 UI、音乐、音效和 CG）尚未进入这个版本；它不是最终作品的视觉呈现。
+当前 Windows 试玩版包含标题、S01–S17 的流程、两段整理交互，以及 S01 的校门／校园小径首批背景。UI、音乐、音效、角色立绘和绝大多数场景仍处于灰盒或未制作状态；它不是最终作品的视觉呈现。
 
 可从 [GitHub Releases](https://github.com/2003SINGER/first-gal-public/releases) 下载当前 Demo。
 
@@ -26,13 +26,13 @@
 
 ## 运行当前 Demo
 
-启动项目（F6）会先进入 `res://scenes/title/title_screen.tscn`：标题演出结束后可开始、读取、设置或退出。开始游戏会进入当前 Demo。
+启动项目（F5）会先进入 `res://scenes/title/title_screen.tscn`：标题演出结束后可开始、继续、读取、设置、鉴赏或退出。开始游戏会进入当前 Demo。
 
 开发时若只想从 S01 直接检查剧情，可打开 `res://dev/scenes/demo_current_runner.tscn` 并按 F6；它会绕过标题菜单。当前流程为 S01 → S17；柜子与桌子两段会暂停 Dialogic，进入各自的整理交互。
 
 ## Included tools
 
 - Godot 4.7.1 editor: `tools/godot-4.7.1/Godot_v4.7.1-stable_win64.exe`
-- Dialogic 2 Alpha 21 (vendored at commit `fd0fa22c335c72583b89b35699f9fb19dd1b4eae`): `addons/dialogic`
+- Dialogic 2 Alpha 20 (vendored at commit `fd0fa22c335c72583b89b35699f9fb19dd1b4eae`): `addons/dialogic`
 
 Dialogic is enabled only for evaluation. The game's save files and core session boundary remain project-owned; Dialogic only provides the timeline state captured by that system.

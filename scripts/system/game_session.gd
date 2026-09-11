@@ -13,12 +13,29 @@ var _scene_controller: Node = null
 var _system_ui: Node = null
 var _interaction_controller: Node = null
 var _pending_new_game := false
+var _pending_recollection := ""
 var _pending_load_slot := ""
 var _loading := false
+var _recollection_active := false
 
 
 func begin_new_game() -> void:
+	_recollection_active = false
 	_pending_new_game = true
+	_pending_recollection = ""
+	_pending_load_slot = ""
+	get_tree().change_scene_to_file(GAME_SCENE)
+
+
+func begin_recollection(recollection_id: StringName) -> void:
+	# The player library currently has one real entry. Keep routing here rather
+	# than letting title UI know Timeline paths.
+	if recollection_id != &"graduation_day_demo":
+		push_warning("GameSession: unknown recollection '%s'." % recollection_id)
+		return
+	_recollection_active = true
+	_pending_new_game = false
+	_pending_recollection = str(recollection_id)
 	_pending_load_slot = ""
 	get_tree().change_scene_to_file(GAME_SCENE)
 
@@ -65,6 +82,17 @@ func _start_pending_request() -> void:
 		await Dialogic.clear()
 		Dialogic.start(DEMO_TIMELINE)
 		call_deferred("_write_autosave")
+		return
+	if not _pending_recollection.is_empty():
+		var recollection_id := _pending_recollection
+		_pending_recollection = ""
+		await Dialogic.clear()
+		if recollection_id == "graduation_day_demo":
+			Dialogic.start(DEMO_TIMELINE)
+
+
+func is_recollection_active() -> bool:
+	return _recollection_active
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -120,7 +148,7 @@ func _save_slot(slot_name: String) -> Error:
 
 
 func _write_autosave() -> void:
-	if not is_in_game or _loading:
+	if not is_in_game or _loading or _recollection_active:
 		return
 	var error := _save_slot(SaveService.AUTO_SLOT)
 	if error != OK:
@@ -128,7 +156,8 @@ func _write_autosave() -> void:
 
 
 func _on_scene_changed(_scene_id: String) -> void:
-	call_deferred("_write_autosave")
+	if not _recollection_active:
+		call_deferred("_write_autosave")
 
 
 func _load_running_slot(slot_name: String) -> void:

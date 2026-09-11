@@ -5,8 +5,11 @@
 [ext_resource type="Script" uid="uid://83xpnm44s55q" path="res://scripts/narrative_bridge.gd" id="3_nb"]
 [ext_resource type="Script" uid="uid://c3j6bi6hvla5c" path="res://scripts/presentation/photo_viewer.gd" id="4_pv"]
 [ext_resource type="Script" uid="uid://bga37xdryjsaw" path="res://scripts/interaction/interaction_controller.gd" id="5_ic"]
-[ext_resource type="PackedScene" path="res://scenes/presentation/history_overlay.tscn" id="6_history"]
 [ext_resource type="PackedScene" path="res://scenes/system/system_ui.tscn" id="7_system_ui"]
+[ext_resource type="PackedScene" path="res://scenes/presentation/transition_overlay.tscn" id="8_transition"]
+[ext_resource type="Script" path="res://scripts/presentation/audio_bridge.gd" id="9_audio"]
+[ext_resource type="PackedScene" path="res://scenes/system/demo_end_card.tscn" id="10_end"]
+[ext_resource type="PackedScene" path="res://scenes/presentation/chapter_title_overlay.tscn" id="11_chapter"]
 
 [node name="FirstGal" type="Node" unique_id=439158931]
 script = ExtResource("1_main")
@@ -66,10 +69,7 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="SFXPlayer" type="AudioStreamPlayer" parent="PresentationRoot" unique_id=991001001]
-
-[node name="HistoryOverlay" parent="PresentationRoot" unique_id=1399226719 instance=ExtResource("6_history")]
-layout_mode = 1
+[node name="TransitionOverlay" parent="PresentationRoot" instance=ExtResource("8_transition")]
 
 [node name="SceneController" type="Node" parent="." unique_id=1722051607]
 script = ExtResource("2_sc")
@@ -77,7 +77,14 @@ script = ExtResource("2_sc")
 [node name="NarrativeBridge" type="Node" parent="." unique_id=86175372]
 script = ExtResource("3_nb")
 
+[node name="AudioBridge" type="Node" parent="."]
+script = ExtResource("9_audio")
+
 [node name="InteractionController" type="Node" parent="." unique_id=1975957576]
 script = ExtResource("5_ic")
 
 [node name="UIRoot" parent="." instance=ExtResource("7_system_ui")]
+
+[node name="ChapterTitleOverlay" parent="." instance=ExtResource("11_chapter")]
+
+[node name="DemoEndCard" parent="." instance=ExtResource("10_end")]

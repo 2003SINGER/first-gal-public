@@ -9,12 +9,11 @@ extends Node
 func _ready() -> void:
 	var scene_host := $SceneHost as Control
 	var photo_viewer := $PresentationRoot/PhotoViewer as Control
-	var sfx_player := $PresentationRoot/SFXPlayer as AudioStreamPlayer
+	var transition_overlay := $PresentationRoot/TransitionOverlay as Control
 
 	$SceneController.setup(scene_host)
-	$NarrativeBridge.setup($SceneController, photo_viewer, $InteractionController, sfx_player)
+	$NarrativeBridge.setup($SceneController, photo_viewer, $InteractionController, transition_overlay, $AudioBridge, $DemoEndCard, $ChapterTitleOverlay)
 	$InteractionController.setup_bridge($NarrativeBridge)
-	sfx_player.bus = &"SFX"
 
 	# Neutral default until a Demo timeline tells us where we are.
 	$SceneController.change_scene("blank")

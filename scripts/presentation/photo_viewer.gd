@@ -25,3 +25,23 @@ func show_photo(texture: Texture2D) -> void:
 func hide_photo() -> void:
 	overlay.hide()
 	photo.texture = null
+
+
+func show_photo_fade(texture: Texture2D, duration := 0.22) -> void:
+	photo.texture = texture
+	overlay.modulate.a = 0.0
+	overlay.show()
+	var tween := create_tween()
+	tween.tween_property(overlay, "modulate:a", 1.0, duration)
+	await tween.finished
+
+
+func hide_photo_fade(duration := 0.22) -> void:
+	if not overlay.visible:
+		return
+	var tween := create_tween()
+	tween.tween_property(overlay, "modulate:a", 0.0, duration)
+	await tween.finished
+	overlay.hide()
+	overlay.modulate.a = 1.0
+	photo.texture = null

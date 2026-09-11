@@ -8,6 +8,9 @@ const CANCEL := &"cancel"
 const MENU := &"menu"
 const SAVE := &"save"
 const LOAD := &"load"
+const ADV_AUTO := &"adv_auto"
+const ADV_LOG := &"adv_log"
+const ADV_HIDE := &"adv_hide"
 
 
 func _ready() -> void:
@@ -17,6 +20,9 @@ func _ready() -> void:
 	_add_key(MENU, KEY_ESCAPE)
 	_add_key(SAVE, KEY_F5)
 	_add_key(LOAD, KEY_F7)
+	_add_key(ADV_AUTO, KEY_A)
+	_add_key(ADV_LOG, KEY_PAGEUP)
+	_add_key(ADV_HIDE, KEY_H)
 
 
 func _add_key(action: StringName, keycode: Key) -> void:

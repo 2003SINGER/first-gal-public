@@ -10,8 +10,16 @@ extends Node
 ##   scene:<id>              -> SceneController.change_scene(<id>)
 ##   photo:<id>              -> show registered photo
 ##   photo:hide              -> hide photo
+##   photo:fade_in:<id>      -> show photo with a short fade
+##   photo:fade_out          -> hide photo with a short fade
 ##   interaction:<id>        -> start a modal gameplay interaction
-##   audio:<sfx_id>          -> play a registered one-shot SFX (missing file -> warning)
+##   audio:<sfx_id>          -> play a registered one-shot SFX (legacy shorthand)
+##   audio:music:<id>|stop   -> Dialogic music channel
+##   audio:amb:<id>|stop     -> Dialogic ambience channel
+##   audio:sfx:<id>          -> Dialogic one-shot SFX channel
+##   transition:<effect>     -> fade_out, fade_in, flash_white
+##   chapter:<id>            -> project-owned upper-left chapter title
+##   system:demo_end          -> explicit project-owned Demo End flow
 ##
 ## We do NOT yet build a custom Dialogic Event. The Alpha20 Signal event is used
 ## as-is; the whole command is sent as one string and split on ":" here.
@@ -19,7 +27,10 @@ extends Node
 var scene_controller: Node = null
 var photo_viewer: Control = null
 var interaction_controller: Node = null
-var sfx_player: AudioStreamPlayer = null
+var transition_controller: Control = null
+var audio_bridge: Node = null
+var demo_end_controller: Node = null
+var chapter_title_overlay: Node = null
 
 # Semantic photo id -> texture path. Add real entries as art lands.
 # Missing files fall back to a generated placeholder so the system never crashes
@@ -36,20 +47,14 @@ const PHOTOS := {
 	"graduation_selfie": "res://assets/photos/ending/graduation_selfie.png",
 }
 
-# One-shot SFX registry. Files live under res://assets/audio/sfx/. If a file is
-# missing we only warn (same placeholder philosophy as photos) — never crash.
-const SFX := {
-	"camera_shutter": "res://assets/audio/sfx/camera_shutter.ogg",
-	"school_bell_muffled": "res://assets/audio/sfx/school_bell_muffled.ogg",
-	"rain_short": "res://assets/audio/sfx/rain_short.ogg",
-}
-
-
-func setup(sc: Node, pv: Control, ic: Node, sp: AudioStreamPlayer) -> void:
+func setup(sc: Node, pv: Control, ic: Node, tc: Control, ab: Node, dec: Node, cto: Node) -> void:
 	scene_controller = sc
 	photo_viewer = pv
 	interaction_controller = ic
-	sfx_player = sp
+	transition_controller = tc
+	audio_bridge = ab
+	demo_end_controller = dec
+	chapter_title_overlay = cto
 	if Dialogic != null and Dialogic.has_signal("signal_event"):
 		Dialogic.signal_event.connect(_on_dialogic_signal)
 
@@ -71,18 +76,34 @@ func _on_dialogic_signal(argument: Variant) -> void:
 		"photo":
 			if payload == "hide":
 				photo_viewer.hide_photo()
+			elif payload == "fade_out":
+				photo_viewer.hide_photo_fade()
+			elif payload.begins_with("fade_in:"):
+				_show_photo_by_id(payload.trim_prefix("fade_in:"), true)
 			else:
 				_show_photo_by_id(payload)
 		"interaction":
 			if interaction_controller != null:
 				interaction_controller.start_interaction(payload)
 		"audio":
-			_play_sfx(payload)
+			if audio_bridge != null:
+				audio_bridge.handle_command(payload)
+		"transition":
+			if transition_controller != null:
+				transition_controller.play(payload)
+		"chapter":
+			if chapter_title_overlay != null:
+				chapter_title_overlay.show_chapter(payload)
+		"system":
+			if payload == "demo_end" and demo_end_controller != null:
+				demo_end_controller.show_demo_end()
+			elif payload != "demo_end":
+				push_warning("NarrativeBridge: unknown system command '%s'" % payload)
 		_:
 			push_warning("NarrativeBridge: unknown command kind '%s'" % kind)
 
 
-func _show_photo_by_id(photo_id: String) -> void:
+func _show_photo_by_id(photo_id: String, fade := false) -> void:
 	if not PHOTOS.has(photo_id):
 		push_warning("NarrativeBridge: unknown photo_id '%s'" % photo_id)
 		return
@@ -93,7 +114,10 @@ func _show_photo_by_id(photo_id: String) -> void:
 	if tex == null:
 		tex = _placeholder_texture(photo_id)
 		push_warning("NarrativeBridge: photo '%s' texture missing; using placeholder." % photo_id)
-	photo_viewer.show_photo(tex)
+	if fade:
+		photo_viewer.show_photo_fade(tex)
+	else:
+		photo_viewer.show_photo(tex)
 
 
 func get_photo_texture(photo_id: String) -> Texture2D:
@@ -108,22 +132,6 @@ func get_photo_texture(photo_id: String) -> Texture2D:
 		tex = _placeholder_texture(photo_id)
 		push_warning("NarrativeBridge: photo '%s' texture missing; using placeholder." % photo_id)
 	return tex
-
-
-func _play_sfx(sfx_id: String) -> void:
-	if sfx_player == null:
-		return
-	if not SFX.has(sfx_id):
-		push_warning("NarrativeBridge: unknown sfx_id '%s'" % sfx_id)
-		return
-
-	var path: String = SFX[sfx_id]
-	if not ResourceLoader.exists(path):
-		push_warning("NarrativeBridge: missing sfx '%s' at %s" % [sfx_id, path])
-		return
-
-	sfx_player.stream = load(path)
-	sfx_player.play()
 
 
 func _placeholder_texture(_id: String) -> Texture2D:

@@ -89,6 +89,7 @@
 # S15｜回到现在 / 最后一张教室照片
 # =============================================================================
 [signal arg="scene:classroom_late_afternoon"]
+[signal arg="chapter:after_the_end"]
 
 我看了一眼教室。
 
@@ -195,3 +196,4 @@ hai_xiang: 不管。
 [wait time=0.8]
 
 # Demo End
+[signal arg="system:demo_end"]

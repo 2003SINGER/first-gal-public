@@ -15,10 +15,14 @@ FirstGal (Node, scripts/main.gd)
 │       └─ Overlay     (Control, hidden by default, mouse_filter=IGNORE)
 │           ├─ Dim     (ColorRect, 50% black, mouse_filter=IGNORE)
 │           └─ Photo   (TextureRect, keep_aspect_covered, mouse_filter=IGNORE)
+│   └─ TransitionOverlay (Control, Full Rect, black/white veil only)
 ├─ SceneController     (Node, scripts/scene_controller.gd)
 ├─ NarrativeBridge    (Node, scripts/narrative_bridge.gd)
+├─ AudioBridge         (Node, scripts/presentation/audio_bridge.gd)
 ├─ InteractionController (Node, scripts/interaction/interaction_controller.gd)
-└─ UIRoot             (CanvasLayer, scenes/system/system_ui.tscn)
+├─ UIRoot             (CanvasLayer, scenes/system/system_ui.tscn)
+├─ ChapterTitleOverlay (CanvasLayer, project presentation UI)
+└─ DemoEndCard        (CanvasLayer, scenes/system/demo_end_card.tscn)
 ```
 
 Layering bottom→top: **World (SceneHost) → Photo (PresentationRoot) → Dialogic
@@ -34,7 +38,13 @@ Owns "current world scene". Maps a semantic id → `PackedScene` and swaps the c
 of SceneHost. **Hard-coded Dictionary registry** (no JSON/ResourceCatalog yet).
 - `setup(host: Control)` — receives SceneHost.
 - `change_scene(scene_id: String)` — unknown ids are warned and ignored.
-- Current registry: `blank`, `school_gate`, `school_corridor`, `classroom`, `classroom_morning`, and `graduation_ceremony` → `res://scenes/world/*.tscn`. The corridor/morning/ceremony entries are graybox support for the current production slice, not a general scene-state system.
+- Current registry includes `blank`, `school_gate`, `school_path`, `school_corridor`,
+  `classroom`, `classroom_morning`, and `graduation_ceremony` →
+  `res://scenes/world/*.tscn`. `school_gate` and `school_path` now use the supplied
+  background art. S01 uses the morning gate first, then switches to the morning
+  `school_path` after the protagonist enters campus. The supplied evening path is
+  retained as a later-use asset. The other current entries remain graybox support
+  for the production slice, not a general scene-state system.
 
 ## 4. NarrativeBridge (`scripts/narrative_bridge.gd`)
 Only bridge between Dialogic and Godot presentation/interaction commands. Connects
@@ -42,12 +52,18 @@ Only bridge between Dialogic and Godot presentation/interaction commands. Connec
 - `scene:<id>`     → `SceneController.change_scene(<id>)`
 - `photo:<id>`     → show registered photo
 - `photo:hide`     → hide photo
+- `photo:fade_in:<id>` / `photo:fade_out` → photo fade
+- `transition:fade_out|fade_in|flash_white` → minimal transition veil
+- `audio:<sfx_id>` / `audio:music:<id>|stop` / `audio:amb:<id>|stop` → AudioBridge
+- `system:demo_end` → DemoEndCard
+- `chapter:<id>` → `ChapterTitleOverlay`（目前 `before_goodbye` / `after_the_end`）
 - `interaction:<id>` → `InteractionController.start_interaction(<id>)`
 Knows no file paths; resource mapping lives in the registries. Modal interaction
 lifecycle is documented separately in `interaction_system.md`.
 
 ## 5. PhotoViewer (`scripts/presentation/photo_viewer.gd`)
-Minimal API: `show_photo(texture: Texture2D)`, `hide_photo()`. Overlay/Dim/Photo
+Minimal API: `show_photo(texture: Texture2D)`, `hide_photo()`, with matching fade
+variants for Timeline semantics. Overlay/Dim/Photo
 are all `mouse_filter = IGNORE` so they never eat Dialogic input. Non-modal by
 design.
 
@@ -67,16 +83,15 @@ or SceneTree structure — only these ids.
 - **Dialogic owns:** dialogue, choices, portraits, timeline order, and emitting
   *when* to switch scene/show photo (semantic commands only).
 - **Godot owns:** current world scene, background, props, future hotspots, scene
-  state, and the actual scene switch / photo presentation.
+  state, and the actual scene switch / photo / chapter-title presentation.
 - The old Dialogic Background Event is NOT used by production world scenes. World
   scenes are Godot `Control` scenes (currently ColorRect+Label placeholders).
   Dialogic Background Event may stay for plugin/experiment timelines only.
 
 ## 9. Not implemented yet (do not pre-build)
-Inventory, formal AudioManager, CG system, custom Dialogic Event, LLM compiler,
-phone UI, full Hotspot framework, relationship/maturity numbers, universal
-VisualManager, and formal Ending UI or Credits. Build each only when its Timeline
-needs it. The implemented title, save/load, settings, input and UIRoot boundary is
+Inventory, CG system, custom Dialogic Event, LLM compiler, phone UI, full Hotspot
+framework, relationship/maturity numbers, universal VisualManager, formal credits,
+and formal GameState. Build each only when its Timeline needs it. The implemented title, save/load, settings, input and UIRoot boundary is
 documented in `game_shell_system.md`.
 
 ## 10. Current production slice: S01–S17
@@ -88,7 +103,11 @@ documented in `game_shell_system.md`.
   S14, S15, and S17 use the existing semantic PhotoViewer commands.
 - S05 emits `interaction:locker_cleanup`; S11 emits `interaction:desk_cleanup`.
   Each modal interaction pauses Dialogic and resumes it after its own `finished(result)`.
-- S17 shows `photo:graduation_selfie` and the text `Demo End`; the Timeline then ends.
+- S01 emits `chapter:before_goodbye` once, marking the **S01–S13** section
+  “再见之前”; S15 emits `chapter:after_the_end`, marking “结束之后”.
+  `ChapterTitleOverlay` briefly shows the mapped title at upper left. This is a
+  story-scale boundary, not a world-scene title and not a Dialogic layout.
+- S17 shows `photo:graduation_selfie`; its explicit `system:demo_end` signal opens the project-owned end card.
 - Project run starts at `res://scenes/title/title_screen.tscn`; Start Game creates a
   new `main.tscn` session and starts S01. Development runner remains
   `res://dev/scenes/demo_current_runner.tscn` for direct timeline work.

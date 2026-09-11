@@ -15,6 +15,7 @@ var scene_host: Control = null
 const SCENES := {
 	"blank": preload("res://scenes/world/blank.tscn"),
 	"school_gate": preload("res://scenes/world/school_gate.tscn"),
+	"school_path": preload("res://scenes/world/school_path.tscn"),
 	"school_corridor": preload("res://scenes/world/school_corridor.tscn"),
 	"classroom": preload("res://scenes/world/classroom.tscn"),
 	"classroom_morning": preload("res://scenes/world/classroom_morning.tscn"),
