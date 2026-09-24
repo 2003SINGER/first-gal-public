@@ -40,11 +40,12 @@ of SceneHost. **Hard-coded Dictionary registry** (no JSON/ResourceCatalog yet).
 - `change_scene(scene_id: String)` — unknown ids are warned and ignored.
 - Current registry includes `blank`, `school_gate`, `school_path`, `school_corridor`,
   `classroom`, `classroom_morning`, and `graduation_ceremony` →
-  `res://scenes/world/*.tscn`. `school_gate` and `school_path` now use the supplied
-  background art. S01 uses the morning gate first, then switches to the morning
-  `school_path` after the protagonist enters campus. The supplied evening path is
-  retained as a later-use asset. The other current entries remain graybox support
-  for the production slice, not a general scene-state system.
+  `res://scenes/world/*.tscn`. `school_gate`, `school_path`, and `school_corridor`
+  use supplied morning backgrounds. S01 enters through the gate, follows the
+  path, then reaches the corridor; the same corridor scene is reused at S02 and
+  after the ceremony for S05. The evening path remains a later-use asset.
+  Other entries remain graybox support for the production slice, not a general
+  scene-state system.
 
 ## 4. NarrativeBridge (`scripts/narrative_bridge.gd`)
 Only bridge between Dialogic and Godot presentation/interaction commands. Connects

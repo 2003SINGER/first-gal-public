@@ -4,9 +4,9 @@
 
 ## 试玩灰盒 Demo
 
-当前 Windows 试玩版包含标题、S01–S17 的流程、两段整理交互，以及 S01 的校门／校园小径首批背景。UI、音乐、音效、角色立绘和绝大多数场景仍处于灰盒或未制作状态；它不是最终作品的视觉呈现。
+当前 Windows／macOS 试玩版包含标题、S01–S17 的流程、两段整理交互，以及校门、校园小径和教室外走廊背景。UI、角色立绘和多数场景仍处于灰盒或未制作状态；它不是最终作品的视觉呈现。
 
-可从 [GitHub Releases](https://github.com/2003SINGER/first-gal-public/releases) 下载当前 Demo。
+可从 [GitHub Releases](https://github.com/2003SINGER/first-gal-public/releases) 下载当前 Demo。最新版本为 v0.1.2，提供 Windows EXE 与 macOS ZIP。
 
 ## 为什么做它
 
